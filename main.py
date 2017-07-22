@@ -549,7 +549,7 @@ def WriteToImage(output, txt, size=45, input='background.jpg'):
 
 if __name__ == "__main__":
 	#print(Spaces())
-	import subprocess
+	'''import subprocess
 	import time
 	cwd=os.path.dirname(os.path.realpath(__file__))
 	p = subprocess.Popen(["audacity", "r.mp3"])
@@ -564,7 +564,8 @@ if __name__ == "__main__":
 	time.sleep(1)
 	pyautogui.click(pyautogui.locateCenterOnScreen('audacity_applyToCurrentFile.png'))
 	time.sleep(10)
-	p.terminate()
+	p.terminate()'''
+	print('started')
 
 
 
