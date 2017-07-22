@@ -47,6 +47,9 @@ def PrintGood(goodtext):
 def ReturnFileName(file):
 	return str(file).partition('.')[0]
 
+def ReturnFileExtension(file):
+	return str(file).partition('.')[2]
+
 def process_item(lent=None, item=None, lenorig=0):
 	global counter
 	lock.acquire()
