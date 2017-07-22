@@ -31,3 +31,9 @@ Current Features:
 * Generate Word Coordinates in Lyric Videos
 * Calculate Amount of Spaces in a lyric video (To Improve Accuracy of OCR)
 * Write OCR results to an image with dynamic font choice
+
+To Do:
+
+* Implement the ability to scan a Spotify Playlist
+* Create a GUI for generating videos
+* Do everything from CIL tools rather than Audicity
