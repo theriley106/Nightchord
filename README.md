@@ -37,3 +37,6 @@ To Do:
 * Implement the ability to scan a Spotify Playlist
 * Create a GUI for generating videos
 * Do everything from CIL tools rather than Audicity
+* Add the ability to generate Keywords and Video Descriptions
+* Post videos automatically
+* Graph the relationship between views and speed variables
