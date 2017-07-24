@@ -325,26 +325,15 @@ def RetrOCR(image=None, listofwords=[]):
 					print('appended: {}'.format(wordlyric))
 					WordsInImage.append(wordlyric)
 		e = []
-		#print(WordsInImage)
 		WordsToSet = LowestSetOfNumbers(WordsInImage, listofwords)
-		'''for i in range(len(AllLists)):
-			print('')
-			if setamount['similar'] > levenshtein(' '.join(AllLists), ' '.join(listofwords[i:i+len(AllLists)])):
-				setamount['similar'] = levenshtein(' '.join(AllLists), ' '.join(listofwords[i:i+len(AllLists)]))
-				setamount['words'] = ' '.join(listofwords[i:i+len(AllLists)])
-				WordsToSet = ' '.join(listofwords[i:i+len(AllLists)])
-		for w in WordsInImage:
-			if len(w) < 1:
-				print('less than 1')
-				w = nextInList(WordsInImage, listofwords)
-			print(w)
-			if w == None:
-				w = ""
-			e.append(w)'''
+		if len(WordsToSet) == 0:
+			WordsToSet = ' '.join(WordsInImage)
+		imagelocation = image[:image.rfind('/') + 1]
 		WriteToImage(image, WordsToSet, size=45, input=image)
-	os.system("mkdir OCR")
-	for result in glob.glob("*.png"):
-		os.system("mv {} OCR/{}".format(result, result))
+	os.system("mkdir OCR &> /dev/null/")
+	for result in glob.glob("{}/*.png".format(imagelocation)):
+		resultz = result.partition('/')[2]
+		os.system("mv {} OCR/{}".format(result, resultz))
 
 def genLines(image=None):
 	PrintGood('This is going to return OCR on either a list of images or full images')
@@ -471,6 +460,50 @@ def findLyrics(image=None, listofwords=[]):
 				w = nextInList(WordsInImage, listofwords)
 			print(w)
 
+def writeLyrics(image=None, listofwords=[]):
+	imagez = GenerateBackground()
+	if len(listofwords) == 0:
+		PrintFail('You need to input a list of words')
+		if 'y' in str(raw_input("Do you want to search for lyrics now? ")).lower():
+			artist = raw_input("Artist: ")
+			song = raw_input("Song: ")
+			listofwords = GrabSongLyrics(artist, song)
+			print(listofwords)
+		else:
+			return
+	if isinstance(image, list) == False:
+		image = PromptList('Which image/images to Scan: ', image)
+	for image in image:
+		WordsInImage = []
+		#spaces = Spaces(image)
+		lines = genLines(image)
+		print(lines)
+		for e in range(len(lines)):
+			for wordlyric in lines[e]:
+				if wordlyric not in listofwords:
+					print('not in list of words: {}'.format(wordlyric))
+					for words in listofwords:
+						A = False
+						if levenshtein(wordlyric, words) < 1:
+							A = True
+							WordsInImage.append(words)
+							break
+					if A == False:
+						WordsInImage.append("")
+				else:
+					print('appended: {}'.format(wordlyric))
+					WordsInImage.append(wordlyric)
+		e = []
+		WordsToSet = LowestSetOfNumbers(WordsInImage, listofwords)
+		if len(WordsToSet) == 0:
+			WordsToSet = ' '.join(WordsInImage)
+		imagelocation = image[:image.rfind('/') + 1]
+		WriteToImage(image, WordsToSet, size=45, input=imagez)
+	os.system("mkdir OCR &> /dev/null/")
+	for result in glob.glob("{}/*.png".format(imagelocation)):
+		resultz = result.partition('/')[2]
+		os.system("mv {} OCR/{}".format(result, resultz))
+
 ############################################################################################3
 ## Audio
 
@@ -577,3 +610,4 @@ if __name__ == "__main__":
 
 #main.findLyrics(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
 #main.RetrOCR(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
+#main.writeLyrics(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
