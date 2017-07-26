@@ -3,6 +3,7 @@
 from PIL import Image
 from tesserocr import PyTessBaseAPI, RIL
 import pyautogui
+import json
 import os
 import bs4
 from moviepy.editor import VideoFileClip
@@ -503,6 +504,58 @@ def writeLyrics(image=None, listofwords=[]):
 	for result in glob.glob("{}/*.png".format(imagelocation)):
 		resultz = result.partition('/')[2]
 		os.system("mv {} OCR/{}".format(result, resultz))
+
+def imageToOCR(image, listofwords):
+	WordsInImage = []
+	lines = genLines(image)
+	for e in range(len(lines)):
+		for wordlyric in lines[e]:
+			if wordlyric not in listofwords:
+				print('not in list of words: {}'.format(wordlyric))
+				for words in listofwords:
+					A = False
+					if levenshtein(wordlyric, words) < 1:
+						A = True
+						WordsInImage.append(words)
+						break
+				if A == False:
+					WordsInImage.append("")
+			else:
+				print('appended: {}'.format(wordlyric))
+				WordsInImage.append(wordlyric)
+	e = []
+	WordsToSet = LowestSetOfNumbers(WordsInImage, listofwords)
+	if len(WordsToSet) == 0:
+		WordsToSet = ' '.join(WordsInImage)
+	return WordsToSet
+
+def ocrToText(image=None, listofwords=[]):
+	#image can be a list of files
+	Words = {}
+	if len(listofwords) == 0:
+		PrintFail('You need to input a list of words')
+		if 'y' in str(raw_input("Do you want to search for lyrics now? ")).lower():
+			artist = raw_input("Artist: ")
+			song = raw_input("Song: ")
+			listofwords = GrabSongLyrics(artist, song)
+			print(listofwords)
+		else:
+			return
+	if isinstance(image, list) == False:
+		image = PromptList('Which image/images to Scan: ', image)
+	for i, image in enumerate(image):
+		i = i + 1
+		Words[i] = imageToOCR(image, listofwords)
+	with open('{}Transcript.json'.format(Words[1]), 'w') as f:
+		json.dump(Words, f)
+
+def readOCR(jsonfile):
+	with open(jsonfile) as data_file:    
+    	data = json.load(data_file)
+	for i in range(1, len(data)):
+		print(data[str(i)])
+
+
 
 ############################################################################################3
 ## Audio
