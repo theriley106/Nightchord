@@ -5,3 +5,5 @@
 *.avi
 *.mp3
 *.mov
+*.pyc
+*.wav
