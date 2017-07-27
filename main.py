@@ -10,6 +10,7 @@ from moviepy.editor import VideoFileClip
 import billboard
 import time
 import random
+import difflib
 import csv
 import subprocess
 import re
@@ -312,23 +313,14 @@ def RetrOCR(image=None, listofwords=[]):
 		print(lines)
 		for e in range(len(lines)):
 			for wordlyric in lines[e]:
-				if wordlyric not in listofwords:
-					print('not in list of words: {}'.format(wordlyric))
-					for words in listofwords:
-						A = False
-						if levenshtein(wordlyric, words) < 1:
-							A = True
-							WordsInImage.append(words)
-							break
-					if A == False:
-						WordsInImage.append("")
-				else:
-					print('appended: {}'.format(wordlyric))
+				try:
+					a = difflib.get_close_matches(wordlyric, listofwords)[0]
+					wordlyric = a
 					WordsInImage.append(wordlyric)
-		e = []
-		WordsToSet = LowestSetOfNumbers(WordsInImage, listofwords)
-		if len(WordsToSet) == 0:
-			WordsToSet = ' '.join(WordsInImage)
+				except Exception as exp:
+					print exp
+				
+		WordsToSet = ' '.join(WordsInImage)
 		imagelocation = image[:image.rfind('/') + 1]
 		WriteToImage(image, WordsToSet, size=45, input=image)
 	os.system("mkdir OCR &> /dev/null/")
