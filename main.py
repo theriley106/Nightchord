@@ -529,7 +529,7 @@ def imageToOCR(image, listofwords):
 		WordsToSet = ' '.join(WordsInImage)
 	return WordsToSet
 
-def ocrToText(image=None, listofwords=[]):
+def ocrToDict(image=None, listofwords=[]):
 	#image can be a list of files
 	Words = {}
 	if len(listofwords) == 0:
@@ -544,16 +544,42 @@ def ocrToText(image=None, listofwords=[]):
 	if isinstance(image, list) == False:
 		image = PromptList('Which image/images to Scan: ', image)
 	for i, image in enumerate(image):
+		Words['Clean'][i] = imageToOCR(image, listofwords)
+	with open('{}Transcript.json'.format(Words[1]), 'w') as f:
+		json.dump(Words, f)
+
+def genNC(image=None, listofwords=[], artist=None, song=None):
+	Words = {}
+
+	if len(listofwords) == 0:
+		PrintFail('You need to input a list of words')
+		if 'y' in str(raw_input("Do you want to search for lyrics now? ")).lower():
+			if artist == None:
+				artist = raw_input("Artist: ")
+			if song == None:
+				song = raw_input("Song: ")
+			listofwords = GrabSongLyrics(artist, song)
+		else:
+			return
+
+
+	if isinstance(image, list) == False:
+		image = PromptList('Which image/images to Scan: ', image)
+
+
+
+	for i, image in enumerate(image):
 		i = i + 1
-		Words[i] = imageToOCR(image, listofwords)
+		Words[i] = genLines(image)
+
 	with open('{}Transcript.json'.format(Words[1]), 'w') as f:
 		json.dump(Words, f)
 
 def readOCR(jsonfile):
 	with open(jsonfile) as data_file:    
-    	data = json.load(data_file)
+		data = json.load(data_file)
 	for i in range(1, len(data)):
-		print(data[str(i)])
+		print('{}-{}'.format(i, data[str(i)]))
 
 
 
