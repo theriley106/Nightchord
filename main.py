@@ -558,14 +558,15 @@ def genNC(image=None, listofwords=[], artist=None, song=None):
 	if isinstance(image, list) == False:
 		image = PromptList('Which image/images to Scan: ', image)
 
-
+	Information = {}
 
 	for i, image in enumerate(image):
 		i = i + 1
 		Words[i] = genLines(image)
-
+	Information['GuessedWords'] = Words
+	Information["Real_Lyrics"] = listofwords
 	with open('{}Transcript.json'.format(Words[1]), 'w') as f:
-		json.dump(Words, f)
+		json.dump(Information, f)
 
 def readOCR(jsonfile):
 	with open(jsonfile) as data_file:    
@@ -666,3 +667,5 @@ if __name__ == "__main__":
 #main.findLyrics(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
 #main.RetrOCR(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
 #main.writeLyrics(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
+
+#main.genNC(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
