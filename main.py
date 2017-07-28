@@ -658,23 +658,7 @@ def WriteToImage(output, txt, size=45, input='background.jpg'):
 
 
 if __name__ == "__main__":
-	#print(Spaces())
-	'''import subprocess
-	import time
-	cwd=os.path.dirname(os.path.realpath(__file__))
-	p = subprocess.Popen(["audacity", "r.mp3"])
-	time.sleep(7)
-	try:
-		if len(list(pyautogui.locateAllOnScreen('src/images/audacity_fileButton.png'))) > 1:
-			a = pyautogui.click(pyautogui.locateCenterOnScreen('audacity_fileButton.png'))
-	except Exception as exp:
-		print('close files that have the file extension thing in background')
-	time.sleep(1)
-	pyautogui.click(pyautogui.locateCenterOnScreen('audacity_applyChain.png'))
-	time.sleep(1)
-	pyautogui.click(pyautogui.locateCenterOnScreen('audacity_applyToCurrentFile.png'))
-	time.sleep(10)
-	p.terminate()'''
+
 	print('started')
 
 
