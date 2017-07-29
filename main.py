@@ -542,7 +542,6 @@ def ocrToDict(image=None, listofwords=[]):
 
 def genNC(image=None, listofwords=[], artist=None, song=None):
 	Words = {}
-
 	if len(listofwords) == 0:
 		PrintFail('You need to input a list of words')
 		if 'y' in str(raw_input("Do you want to search for lyrics now? ")).lower():
@@ -667,5 +666,4 @@ if __name__ == "__main__":
 #main.findLyrics(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
 #main.RetrOCR(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
 #main.writeLyrics(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
-
 #main.genNC(image=main.ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[])
