@@ -49,15 +49,21 @@ class nightcore(object):
 		self.sources.append(information)
 
 	#def generate(self, ):
+	
 
 	def genVideos(self):
 		for items in self.sources:
+			print items['artist']
+			print items['song']
 			try:
 				filename = '{}_{}'.format(items['artist'].replace(' ', '_'), items['song'].replace(' ', '_'))
 			except:
 				filename = items['url'].replace('https://www.youtube.com/watch?v=', '')
 			DownloadVideo(items['url'], saveas=filename)
-			#ExtractFrames(filename, filename)
+			ExtractFrames(filename, filename)
+			e = ReturnAll(filename, 'jpg')
+			print(e)
+			genNC(image=e, artist=items['artist'], song=items['song'])
 			#CompareOCR(filename, filename)
 			ExtractAudio('{}.mp4'.format(filename))
 			applyChain('{}.mp3'.format(filename))

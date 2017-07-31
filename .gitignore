@@ -7,3 +7,5 @@
 *.mov
 *.pyc
 *.wav
+*.json
+*.pyc

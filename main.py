@@ -258,6 +258,7 @@ def ExtractFrames(video, folder=None):
 	os.system('mkdir {}'.format(folder))
 	videourl = video.replace('.mp4', '')
 	for i in range(1, int(GetDuration('{}.mp4'.format(videourl)))):
+		print('Frame {} Completed'.format(i))
 		os.system("ffmpeg -loglevel panic -ss {} -i {}.mp4 -y {}/{}.jpg".format(i, videourl, folder, i))
 
 def CompareOCR(video, folder=None):
@@ -543,16 +544,11 @@ def ocrToDict(image=None, listofwords=[]):
 def genNC(image=None, listofwords=[], artist=None, song=None):
 	Words = {}
 	if len(listofwords) == 0:
-		PrintFail('You need to input a list of words')
-		if 'y' in str(raw_input("Do you want to search for lyrics now? ")).lower():
-			if artist == None:
-				artist = raw_input("Artist: ")
-			if song == None:
-				song = raw_input("Song: ")
-			listofwords = GrabSongLyrics(artist, song)
-		else:
-			return
-
+		if artist == None:
+			artist = raw_input("Artist: ")
+		if song == None:
+			song = raw_input("Song: ")
+		listofwords = GrabSongLyrics(artist, song)
 
 	if isinstance(image, list) == False:
 		image = PromptList('Which image/images to Scan: ', image)
