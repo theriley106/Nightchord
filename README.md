@@ -40,3 +40,5 @@ To Do:
 * Add the ability to generate Keywords and Video Descriptions
 * Post videos automatically
 * Graph the relationship between views and speed variables
+
+
