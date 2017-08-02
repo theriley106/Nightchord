@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from PIL import Image
 from tesserocr import PyTessBaseAPI, RIL
 import pyautogui
 import json
 import os
 import bs4
+import pytesseract
 from moviepy.editor import VideoFileClip
 import billboard
 import time
@@ -253,13 +253,20 @@ def GrabSongLyrics(artist, song):
 ##########################################################################
 ## Video
 def ExtractFrames(video, folder=None):
+	threads = []
+	def doCommand(videourl, folder, i):
+		print('Frame {} Completed'.format(i))
+		os.system("ffmpeg -loglevel panic -ss {} -i {}.mp4 -y {}/{}.jpg".format(i, videourl, folder, i))
 	if folder == None:
 		folder = str(random.randint(1, 10000))
 	os.system('mkdir {}'.format(folder))
 	videourl = video.replace('.mp4', '')
 	for i in range(1, int(GetDuration('{}.mp4'.format(videourl)))):
-		print('Frame {} Completed'.format(i))
-		os.system("ffmpeg -loglevel panic -ss {} -i {}.mp4 -y {}/{}.jpg".format(i, videourl, folder, i))
+		t = threading.Thread(target=doCommand, args=(videourl, folder, i))
+		threads.append(t)
+		t.start()
+	for t in threads:
+		t.join()	
 
 def CompareOCR(video, folder=None):
 	ExtractFrames(video, folder)
@@ -543,21 +550,10 @@ def ocrToDict(image=None, listofwords=[]):
 
 def genNC(image=None, listofwords=[], artist=None, song=None):
 	Words = {}
-	if len(listofwords) == 0:
-		if artist == None:
-			artist = raw_input("Artist: ")
-		if song == None:
-			song = raw_input("Song: ")
-		listofwords = GrabSongLyrics(artist, song)
-
-	if isinstance(image, list) == False:
-		image = PromptList('Which image/images to Scan: ', image)
-
 	Information = {}
-
 	for i, image in enumerate(image):
 		i = i + 1
-		Words[i] = genLines(image)
+		Words[i] = pytesseract.image_to_string(Image.open(image))
 	Information['GuessedWords'] = Words
 	Information["Real_Lyrics"] = listofwords
 	with open('{}Transcript.json'.format(Words[1]), 'w') as f:
