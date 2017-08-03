@@ -28,12 +28,6 @@ class nightcore(object):
 		information = {'url': str(url)}
 		self.sources.append(information)
 
-	#def localvideo(self,):
-
-	#def localaudio(self,):
-
-	#def spotifyplaylist
-
 
 
 	def song(self, artist=None, song=None):
