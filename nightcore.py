@@ -42,9 +42,6 @@ class nightcore(object):
 		information = {'url': genYoutube(search)}
 		self.sources.append(information)
 
-	#def generate(self, ):
-	
-
 	def genVideos(self):
 		for items in self.sources:
 			print items['artist']
