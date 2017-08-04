@@ -1,4 +1,4 @@
-from main import *
+from __init__ import *
 
 def createYoutube(URL=None, Speed=None, SaveAs=None):
 	if URL == None:
