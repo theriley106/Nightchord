@@ -28,29 +28,45 @@ sys.setdefaultencoding('utf8')
 ###THIS IS ONLY FOR PRINTING STUFF
 lock = threading.Lock()
 
+def GenerateBackground():
+	return random.choice(glob.glob("src/backgrounds/*.jpg"))
+
+
+def stripExtension(filename):
+	return filename[:filename.rfind('.')]
+
+def stripPath(filename):
+	return filename[filename.rfind('/') + 1:]
+
+def findPath(filename):
+	return filename[:filename.rfind('/') + 1]
+
 def GetDuration(clip):
 	if '.mp4' in str(clip):
 		return VideoFileClip(clip).duration
 	elif '.mp3' in str(clip):
 		return eyed3.load('{}'.format(clip)).info.time_secs
 
+def csvToList(filename):
+	file = [row for row in csv.reader(open(filename, 'r'))]
+	return [l[0] for l in file]
+
+def shuffleList(listname):
+	return random.shuffle(listname)
 
 def LoadHeader():
-	UserAgentCSV = open('UserAgent.csv', 'r')
-	UserAgentList = csv.reader(UserAgentCSV)
-	UserAgentList = [row for row in UserAgentList]
-	UserAgentList = [l[0] for l in UserAgentList]
-	random.shuffle(UserAgentList)
+	UserAgentCSV = csvToList('UserAgent.csv')
+	UserAgentList = shuffleList(UserAgentList)
 	return {'User-Agent': random.choice(UserAgentList)}
 
-def genNC(image=None, listofwords=[], artist=None, song=None):
-	Words = {}
-	Information = {}
-	for i, image in enumerate(image):
-		i = i + 1
-		Words[i] = pytesseract.image_to_string(Image.open(image))
-	Information['GuessedWords'] = Words
-	Information["Real_Lyrics"] = listofwords
+def genYoutubeURL(string):
+	string = string.replace(' ', '+')
+	return 'https://www.youtube.com/results?search_query={}'.format(string)
+
+def grabYoutubeID(result):
+	return str(result.select('.overflow-menu-choice')[0]).partition('data-video-ids="')[2].partition('" onclick="')[0]
+
+def generateOCR(jsondict):
 	with open('{}Transcript.json'.format(Words[1]), 'w') as f:
 		json.dump(Information, f)
 
@@ -58,8 +74,7 @@ def findSong(artist, song):
 	return genYoutube('{} {} lyrics'.format(artist, song))
 
 def genYoutube(string):
-	string = string.replace(' ', '+')
-	URL = 'https://www.youtube.com/results?search_query={}'.format(string)
+	URL = genYoutubeURL(string)
 	res = requests.get(URL, headers=LoadHeader())
 	page = bs4.BeautifulSoup(res.text, "lxml")
 	Result = page.select('.item-section > li .clearfix')
@@ -67,19 +82,66 @@ def genYoutube(string):
 	for number in Result:
 		if 'Duration' in str(number):
 			Results.append(number)
-	VideoID = str(Results[0].select('.overflow-menu-choice')[0]).partition('data-video-ids="')[2].partition('" onclick="')[0]
+	VideoID = grabYoutubeID(Results[0])
 	URL = 'https://www.youtube.com/watch?v={}'.format(VideoID)
 	return URL
 
 def ExtractAudio(filename):
-	#This receives a .mp4 file but it removes .mp4 because the alternative seemed confusing af
-	filename = str(filename).replace('.mp4', '')
+	filename = stripExtension(filename)
 	os.system('ffmpeg -i {}.mp4 -y {}.mp3'.format(filename, filename))
 	return '{}.mp3'.format(filename)
-	#I don't know why this returns anything.  ideally it should just be a boolean depending on if it worked or not
 
 def ReturnAll(folder, extension='mp3'):
 	return glob.glob("{}/*.{}".format(folder, extension))
+
+def CombineAudioandImage(audio, image=GenerateBackground(), output=None):
+	if output == None:
+		output = stripExtension(str(audio))
+	os.system("ffmpeg -loop 1 -i {} -i {} -y -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest -strict -2 {}.mp4".format(image, audio, output))
+
+def GenerateNewMusic():
+	return billboard.ChartData('hot-100')
+
+def genNC(image=None, listofwords=[], artist=None, song=None):
+	threads = []
+	Words = {}
+	
+	def batchExtract(listofimages):
+		for image in listofimages:
+			try:
+				extractText(image)
+			except Exception as exp:
+				print(exp)
+				pass
+
+	def doCommand(image, listofwords):
+		a = pytesseract.image_to_string(Image.open(image)).encode('utf-8','replace')
+		print difflib.get_close_matches(a, listofwords)[0]
+
+	Information = {}
+	listofwords = GrabSongLyrics(artist, song)
+	d = []
+
+	for i in range(len(image) / 5):
+		t = threading.Thread(target=batchExtract, args=([image[i*5:(i*5) + 4]]))
+		d.append(t)
+		t.start()
+
+	for t in d:
+		t.join()
+
+	for i, image in enumerate(image):
+		t = threading.Thread(target=doCommand, args=(image, i))
+		threads.append(t)
+		t.start()
+
+	for t in threads:
+		t.join()
+	Information["GuessedWords"] = Words
+	Information["Real_Lyrics"] = listofwords
+	with open('{}Transcript.json'.format(Words[1]), 'w') as f:
+		json.dump(Information, f)
+
 
 def applyChain(file):
 	p = subprocess.Popen(["audacity", "./{}".format(file)])
@@ -106,23 +168,14 @@ def applyChain(file):
 	p.terminate()
 	print('Done')
 
-def CombineAudioandImage(audio, image=None, output=None):
-	if image == None:
-		image = GenerateBackground()
-	if output == None:
-		output = str(audio)
-	output = str(output).replace('.wav', '')
-	output = str(output).replace('.mp3', '')
-	os.system("ffmpeg -loop 1 -i {} -i {} -y -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest -strict -2 {}.mp4".format(image, audio, output))
 
-def GenerateBackground():
-	return random.choice(glob.glob("src/backgrounds/*.jpg"))
 
 def DownloadVideo(url, saveas='Vid.mp4'):
 	os.system("youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' --output {} {} 2> /dev/null".format(saveas, url))
 	return saveas
 
 def ExtractFrames(video, folder=None):
+	#this function converts the mp3 into a folder filled with pictures
 	threads = []
 	def doCommand(videourl, folder, i):
 		print('Frame {} Completed'.format(i))
@@ -147,3 +200,17 @@ def ExtractAudio(filename):
 
 def returnSimilarWord(word, listofwords):
 	return difflib.get_close_matches(word, listofwords)[0]
+
+def GrabSongLyrics(artist, song):
+	return str(PyLyrics.getLyrics(artist, song)).replace('\n', ' ').replace('\t', '').split(' ')
+
+def extractText(image):
+	print('{} Extracted'.format(image))
+	filename = image
+	filename = filename[:filename.rfind('/') + 1] + 'tmp' + filename[filename.rfind('/') + 1:]
+	os.system('python extract_text.py {} {}'.format(image, filename))
+	os.remove(image)
+	os.system('mv {} {}'.format(filename, image))
+	return image
+if __name__ == "__main__":
+	genNC(image=ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[], artist='beware of darkness', song='all who remain')
