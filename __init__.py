@@ -31,7 +31,6 @@ lock = threading.Lock()
 def GenerateBackground():
 	return random.choice(glob.glob("src/backgrounds/*.jpg"))
 
-
 def stripExtension(filename):
 	return filename[:filename.rfind('.')]
 
@@ -49,15 +48,19 @@ def GetDuration(clip):
 
 def csvToList(filename):
 	file = [row for row in csv.reader(open(filename, 'r'))]
-	return [l[0] for l in file]
+	a = [l[0] for l in file]
+	return a
 
 def shuffleList(listname):
 	return random.shuffle(listname)
 
 def LoadHeader():
-	UserAgentCSV = csvToList('UserAgent.csv')
-	UserAgentList = shuffleList(UserAgentList)
-	return {'User-Agent': random.choice(UserAgentList)}
+	UserAgentCSV = open('UserAgent.csv', 'r')
+	UserAgentList = csv.reader(UserAgentCSV)
+	UserAgentList = [row for row in UserAgentList]
+	UserAgentList = [l[0] for l in UserAgentList]
+	random.shuffle(UserAgentList)
+	return {'User-Agent': random.choice(UserAgentList)} 
 
 def genYoutubeURL(string):
 	string = string.replace(' ', '+')
@@ -86,6 +89,12 @@ def genYoutube(string):
 	URL = 'https://www.youtube.com/watch?v={}'.format(VideoID)
 	return URL
 
+def ocrList(image):
+	response = pytesseract.image_to_string(Image.open(image)).encode('utf-8','replace')
+	if len(response) > 5:
+		response = response.replace('\n', ' ').replace('  ', ' ').split(' ')
+	return response
+
 def ExtractAudio(filename):
 	filename = stripExtension(filename)
 	os.system('ffmpeg -i {}.mp4 -y {}.mp3'.format(filename, filename))
@@ -102,6 +111,51 @@ def CombineAudioandImage(audio, image=GenerateBackground(), output=None):
 def GenerateNewMusic():
 	return billboard.ChartData('hot-100')
 
+def calcSpaces(image):
+	response = pytesseract.image_to_string(Image.open(image)).encode('utf-8','replace')
+	print response
+	response = response.replace('\n', '').split(' ')
+	return len(response)
+
+def getClosestMatch(string, listofstrings):
+	return difflib.get_close_matches(string, listofstrings)[0]
+
+def removeNoise(listofwords, largerlistofwords):
+	#this essentially finds the correct words for a list of words (lyrics)
+	incorrect = 0
+	ReturnVals = []
+	for words in listofwords:
+		try:
+			newword = getClosestMatch(words, largerlistofwords)
+			if levenshtein(words, newword) > (len(words) / 2):
+				incorrect = incorrect + 1
+				newword = words
+			ReturnVals.append(newword)
+		except:
+			pass
+	if incorrect < len(listofwords) / 2:
+		return ReturnVals
+	else:
+		return []
+
+
+def levenshtein(s1, s2):
+	if len(s1) < len(s2):
+		return levenshtein(s2, s1)
+	if len(s2) == 0:
+		return len(s1)
+
+	previous_row = range(len(s2) + 1)
+	for i, c1 in enumerate(s1):
+		current_row = [i + 1]
+		for j, c2 in enumerate(s2):
+			insertions = previous_row[j + 1] + 1
+			deletions = current_row[j] + 1
+			substitutions = previous_row[j] + (c1 != c2)
+			current_row.append(min(insertions, deletions, substitutions))
+		previous_row = current_row
+	return previous_row[-1]
+
 def genNC(image=None, listofwords=[], artist=None, song=None):
 	threads = []
 	Words = {}
@@ -115,8 +169,10 @@ def genNC(image=None, listofwords=[], artist=None, song=None):
 				pass
 
 	def doCommand(image, listofwords):
-		a = pytesseract.image_to_string(Image.open(image)).encode('utf-8','replace')
-		print difflib.get_close_matches(a, listofwords)[0]
+		a = pytesseract.image_to_string(Image.open(image)).encode('utf-8','replace').split(' ')
+		for a in a:
+			if len(a) > 3:
+				print difflib.get_close_matches(str(a), listofwords)[0]
 
 	Information = {}
 	listofwords = GrabSongLyrics(artist, song)
@@ -175,7 +231,8 @@ def DownloadVideo(url, saveas='Vid.mp4'):
 	return saveas
 
 def ExtractFrames(video, folder=None):
-	#this function converts the mp3 into a folder filled with pictures
+	#this is the one that disables the keyboard use
+	#this function converts the mp4 into a folder filled with pictures
 	threads = []
 	def doCommand(videourl, folder, i):
 		print('Frame {} Completed'.format(i))
@@ -212,5 +269,11 @@ def extractText(image):
 	os.remove(image)
 	os.system('mv {} {}'.format(filename, image))
 	return image
+
 if __name__ == "__main__":
-	genNC(image=ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[], artist='beware of darkness', song='all who remain')
+	#genNC(image=ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[], artist='beware of darkness', song='all who remain')
+	lyrics = GrabSongLyrics('beware of darkness', 'all who remain')
+	for image in ReturnAll('beware_of_darkness_all_who_remain', 'jpg'):
+		words = ocrList(image)
+		a = removeNoise(words, lyrics)
+		print(a)
