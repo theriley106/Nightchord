@@ -137,7 +137,19 @@ def removeNoise(listofwords, largerlistofwords):
 		return ReturnVals
 	else:
 		return []
+		
+def genAmazonURL(search):
+	return 'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Ddigital-music&field-keywords={}'.format(search.replace(' ', '+'))
 
+def grabSongs(artist):
+	url = genAmazonURL(artist)
+	res = requests.get(url, headers=headers)
+	page = bs4.BeautifulSoup(res.text)
+	songs = []
+	e = page.select(".songTitle")
+	for a in e[1:]:
+		songs.append(str(a.getText()))
+	return songs
 
 def levenshtein(s1, s2):
 	if len(s1) < len(s2):
