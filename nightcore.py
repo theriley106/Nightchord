@@ -28,7 +28,12 @@ class nightcore(object):
 		information = {'url': str(url)}
 		self.sources.append(information)
 
-
+	def artist(self, artist):
+		for song in grabSongs(artist):
+			try:
+				self.song(artist, song)
+			except Exception as exp:
+				print(exp)
 
 	def song(self, artist=None, song=None):
 		if artist == None:
