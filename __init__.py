@@ -5,6 +5,7 @@ import pyautogui
 import json
 import os
 import bs4
+import subprocess
 import pytesseract
 from moviepy.editor import VideoFileClip
 import billboard
@@ -12,7 +13,6 @@ import time
 import random
 import difflib
 import csv
-import subprocess
 import re
 from PyLyrics import *
 import Image, ImageChops, ImageDraw, ImageFont, ImageFilter
@@ -281,6 +281,30 @@ def extractText(image):
 	os.remove(image)
 	os.system('mv {} {}'.format(filename, image))
 	return image
+
+def epicAudioCollab(audio):
+	#work on this to get this to work
+	saveas = stripExtension(audio) + '.mp4'
+	cmd = """ffmpeg -i {} -filter_complex \
+	"[0:a]avectorscope=s=640x518,pad=1280:720[vs]; \
+	 [0:a]showspectrum=mode=separate:color=intensity:scale=cbrt:s=640x518[ss]; \
+	 [0:a]showwaves=s=1280x202:mode=line[sw]; \
+	 [vs][ss]overlay=w[bg]; \
+	 [bg][sw]overlay=0:H-h,drawtext=fontfile=/usr/share/fonts/TTF/Vera.ttf:fontcolor=white:x=10:y=10:text='\"Song Title\" by Artist'[out]" \
+	-map "[out]" -map 0:a -c:v libx264 -preset fast -crf 18 -c:a copy {}""".format(audio, saveas)
+	subprocess.check_output(cmd, shell=True)
+
+def applySpectogram(audio):
+	saveas = stripExtension(audio) + '.mp4'
+	os.system('ffmpeg -i {} -filter_complex showspectrum=mode=separate:color=intensity:slide=1:scale=cbrt -y -acodec copy {}'.format(audio, saveas))
+
+def applyAvectorscope(audio):
+	saveas = stripExtension(audio) + '.mp4'
+	os.system('ffmpeg -i {} -filter_complex avectorscope=s=320x240 -y -acodec copy {}'.format(audio, saveas))
+
+def applyMandelbrot(audio):
+	saveas = stripExtension(audio) + '.mp4'
+	os.system('ffmpeg -i {} -filter_complex avectorscope=s=320x240 -y -acodec copy {}'.format(audio, saveas))
 
 if __name__ == "__main__":
 	#genNC(image=ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[], artist='beware of darkness', song='all who remain')
