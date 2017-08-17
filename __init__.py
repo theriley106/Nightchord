@@ -285,14 +285,7 @@ def extractText(image):
 def epicAudioCollab(audio):
 	#work on this to get this to work
 	saveas = stripExtension(audio) + '.mp4'
-	cmd = """ffmpeg -i {} -filter_complex \
-	"[0:a]avectorscope=s=640x518,pad=1280:720[vs]; \
-	 [0:a]showspectrum=mode=separate:color=intensity:scale=cbrt:s=640x518[ss]; \
-	 [0:a]showwaves=s=1280x202:mode=line[sw]; \
-	 [vs][ss]overlay=w[bg]; \
-	 [bg][sw]overlay=0:H-h,drawtext=fontfile=/usr/share/fonts/TTF/Vera.ttf:fontcolor=white:x=10:y=10:text='\"Song Title\" by Artist'[out]" \
-	-map "[out]" -map 0:a -c:v libx264 -preset fast -crf 18 -c:a copy {}""".format(audio, saveas)
-	subprocess.check_output(cmd, shell=True)
+	os.system('./genVideos.sh epic {} {}'.format(audio, saveas))
 
 def applySpectogram(audio):
 	saveas = stripExtension(audio) + '.mp4'
