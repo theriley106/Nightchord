@@ -299,6 +299,11 @@ def applyMandelbrot(audio):
 	saveas = stripExtension(audio) + '.mp4'
 	os.system('./genVideos.sh mandelbrot {} {}'.format(audio, saveas))
 
+def convertFramesToVid(saveas, folder=None):
+	if folder != None:
+		folder = folder + '/'
+	os.system('ffmpeg -r 60 -f image2 -s 1920x1080 -i {}%07d.png -vcodec libx264 -crf 25  -pix_fmt yuv420p {}'.format(folder, saveas))
+
 if __name__ == "__main__":
 	#genNC(image=ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[], artist='beware of darkness', song='all who remain')
 	lyrics = GrabSongLyrics('beware of darkness', 'all who remain')
