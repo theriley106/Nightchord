@@ -40,5 +40,6 @@ To Do:
 * Add the ability to generate Keywords and Video Descriptions
 * Post videos automatically
 * Graph the relationship between views and speed variables
-
+* Figure out a way to pick relevant Backgrounds (Scrape Wikipedia for Band Member gender and base off that?)
+* ^ Based off of that create a way to automatically change speed based on Gender of lead singer
 
