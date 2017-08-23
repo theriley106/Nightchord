@@ -577,7 +577,7 @@ def ExtractAudio(filename):
 	return '{}.mp3'.format(filename)
 	#I don't know why this returns anything.  ideally it should just be a boolean depending on if it worked or not
 
-def genCIL(file, v=2, speed=1.2, pitch=31):
+def genCIL(file, v=2, speed=1.25, pitch=31):
 	saveas = ReturnFileName(file)
 	os.system('sox -v {}.0 {} finished.mp3 speed {} pitch +{}'.format(v, file, speed, pitch))
 	os.system('mv finished.mp3 {}.mp3'.format(saveas))
