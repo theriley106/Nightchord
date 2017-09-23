@@ -77,7 +77,7 @@ def ocrImage(image):
 	os.system("{} > tmp.json".format(a))
 	with open('tmp.json') as json_data:
 	    d = json.load(json_data)
-	    return d
+	return d['responses'][0]['textAnnotations'][0]['description']
 
 def LoadHeader():
 	UserAgentCSV = open('UserAgent.csv', 'r')
@@ -337,4 +337,5 @@ if __name__ == "__main__":
 		a = removeNoise(words, lyrics)
 		print(a)'''
 	print str(APIKEY)
-	print ocrImage('test.jpg')
+	image = raw_input("image: ")
+	print ocrImage(image)
