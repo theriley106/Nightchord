@@ -7,6 +7,7 @@ import os
 import bs4
 import subprocess
 import pytesseract
+import base64
 from moviepy.editor import VideoFileClip
 import billboard
 import time
@@ -40,11 +41,8 @@ def stripPath(filename):
 def findPath(filename):
 	return filename[:filename.rfind('/') + 1]
 
-def convertBase(image, saveas=None):
-	is saveas == None:
-		saveas = stripExtension(image) + '.txt'
-	os.system('base 64 {} > {}'.format(image, saveas))
-	return saveas
+def convertBase(image):
+	return base64.b64encode(open(image, "rb").read())
 
 def GetDuration(clip):
 	if '.mp4' in str(clip):
@@ -59,6 +57,9 @@ def csvToList(filename):
 
 def shuffleList(listname):
 	return random.shuffle(listname)
+
+def genReqJson(filename, saveas="Request.json"):
+
 
 def LoadHeader():
 	UserAgentCSV = open('UserAgent.csv', 'r')
