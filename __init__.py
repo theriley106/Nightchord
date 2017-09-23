@@ -40,6 +40,12 @@ def stripPath(filename):
 def findPath(filename):
 	return filename[:filename.rfind('/') + 1]
 
+def convertBase(image, saveas=None):
+	is saveas == None:
+		os.system('base 64 {} > {}.txt'.format(image, stripExtension(image)))
+	else:
+		os.system('base 64 {} > {}'.format(image, saveas))
+
 def GetDuration(clip):
 	if '.mp4' in str(clip):
 		return VideoFileClip(clip).duration

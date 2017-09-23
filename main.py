@@ -25,7 +25,6 @@ import sys
 import itertools
 reload(sys)
 sys.setdefaultencoding('utf8')
-###THIS IS ONLY FOR PRINTING STUFF
 counter = {"lev": 500, "item": ""}
 lock = threading.Lock()
 class bcolors:

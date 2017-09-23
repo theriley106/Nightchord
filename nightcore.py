@@ -1,4 +1,4 @@
-from __init__ import *
+from main import *
 
 def createYoutube(URL=None, Speed=None, SaveAs=None):
 	if URL == None:
@@ -62,8 +62,9 @@ class nightcore(object):
 			#genNC(image=e, artist=items['artist'], song=items['song'])
 			#CompareOCR(filename, filename)
 			ExtractAudio('{}.mp4'.format(filename))
-			applyChain('{}.mp3'.format(filename))
-			CombineAudioandImage('cleaned/{}.wav'.format(filename))
+			#applyChain('{}.mp3'.format(filename))
+			genCIL("{}.mp3".format(filename))
+			CombineAudioandImage('{}.mp3'.format(filename))
 
 		for item in ReturnAll('../Main', 'mp4') + ReturnAll('../Main', 'mp3') + ReturnAll('../Main', 'avi'):
 			os.remove(item)
