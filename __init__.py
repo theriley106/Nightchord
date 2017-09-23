@@ -42,9 +42,9 @@ def findPath(filename):
 
 def convertBase(image, saveas=None):
 	is saveas == None:
-		os.system('base 64 {} > {}.txt'.format(image, stripExtension(image)))
-	else:
-		os.system('base 64 {} > {}'.format(image, saveas))
+		saveas = stripExtension(image) + '.txt'
+	os.system('base 64 {} > {}'.format(image, saveas))
+	return saveas
 
 def GetDuration(clip):
 	if '.mp4' in str(clip):
