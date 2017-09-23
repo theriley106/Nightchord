@@ -28,7 +28,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 ###THIS IS ONLY FOR PRINTING STUFF
 lock = threading.Lock()
-
+APIKEY = open('apiKey.txt','r').read()
 def GenerateBackground():
 	return random.choice(glob.glob("src/backgrounds/*.jpg"))
 
@@ -58,8 +58,26 @@ def csvToList(filename):
 def shuffleList(listname):
 	return random.shuffle(listname)
 
-def genReqJson(filename, saveas="Request.json"):
+def genReqJson(image):
+	a = open("Request.json", "r").read()
+	a = a.replace('BASE', convertBase(image))
+	return str(json.dumps(a))
+	
 
+def genCurl(basefile):
+	a = 'curl -v -s -H "Content-Type: application/json" https://vision.googleapis.com/v1/images:annotate?key={} --data-binary @{}'.format(APIKEY, basefile)
+	return a
+
+def ocrImage(image):
+	inpu = open('Request.json', 'r')
+	out = open('Request.tmp', 'w')
+	out.write(inpu.read().replace('BASE', convertBase(image)))
+	out.close()
+	a = genCurl("Request.tmp")
+	os.system("{} > tmp.json".format(a))
+	with open('tmp.json') as json_data:
+	    d = json.load(json_data)
+	    return d
 
 def LoadHeader():
 	UserAgentCSV = open('UserAgent.csv', 'r')
@@ -313,8 +331,10 @@ def convertFramesToVid(saveas, folder=None):
 
 if __name__ == "__main__":
 	#genNC(image=ReturnAll('beware_of_darkness_all_who_remain', 'jpg'), listofwords=[], artist='beware of darkness', song='all who remain')
-	lyrics = GrabSongLyrics('beware of darkness', 'all who remain')
+	'''lyrics = GrabSongLyrics('beware of darkness', 'all who remain')
 	for image in ReturnAll('beware_of_darkness_all_who_remain', 'jpg'):
 		words = ocrList(image)
 		a = removeNoise(words, lyrics)
-		print(a)
+		print(a)'''
+	print str(APIKEY)
+	print ocrImage('test.jpg')
