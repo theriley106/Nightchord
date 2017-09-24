@@ -1,4 +1,12 @@
 from main import *
+from itertools import islice
+import googleinteraction
+import threading
+import time
+
+def chunk(it, size):
+    it = iter(it)
+    return iter(lambda: tuple(islice(it, size)), ())
 
 def createYoutube(URL=None, Speed=None, SaveAs=None):
 	if URL == None:
@@ -49,6 +57,7 @@ class nightcore(object):
 
 	def genVideos(self):
 		for items in self.sources:
+			start = time.time()
 			print items['artist']
 			print items['song']
 			try:
@@ -57,18 +66,42 @@ class nightcore(object):
 				filename = items['url'].replace('https://www.youtube.com/watch?v=', '')
 			DownloadVideo(items['url'], saveas=filename)
 			ExtractFrames(filename, filename)
-			frames = {}
-			for file in ReturnAll(filename, 'jpg'):
-				try:
-					txt = ocrImage(file)
-					WriteToImage(file, txt, size=45)
-				except Exception as exp:
-					print exp
+			audio = ExtractAudio('{}.mp4'.format(filename))
+			results = {}
+			for filelist in list(chunk(ReturnAll(filename, 'jpg'), 16)):
+				a = googleinteraction.genOCR()
+				for file in filelist:
+					a.addImage(file)
+				info = a.returnCommand()
+				for key, value in info.iteritems():
+					results[key] = value
+			#WriteToImage(file, txt, size=45)
 				'''try:
 					frames[str(stripPath(stripExtension(file)))] = ocrImage(file)
 				except Exception as exp:
 					print exp'''
-			print frames
+			print results
+			threads = []
+			f = 0
+			for key, value in results.iteritems():
+				t = threading.Thread(target=WriteToImage, args=(key, value))
+				threads.append(t)
+				t.start()
+				f = f + 1
+				if f % 10 == 0:
+					time.sleep(10)
+			for t in threads:
+				t.join()
+			video = genVidFromFolder(filename, "{}.mp4".format(filename))
+			filename = "{}.mp4".format(filename)
+			l1 = GetDuration(audio)
+			print('start gen cil')
+			os.system('cp {} {}backup.{}'.format(filename, filename.partition('.')[0], filename.partition(".")[2]))
+			genCIL(audio)
+			l2 = GetDuration(audio)
+			video = SpeedUpVideo(filename)
+			print 'done with speed up'
+			return CombineVidandAudio(audio, video)
 			#genNC(image=e, artist=items['artist'], song=items['song'])
 			#CompareOCR(filename, filename)
 			#ExtractAudio('{}.mp4'.format(filename))
@@ -76,9 +109,9 @@ class nightcore(object):
 			#genCIL("{}.mp3".format(filename))
 			#CombineAudioandImage('{}.mp3'.format(filename))
 
-		for item in ReturnAll('../Main', 'mp4') + ReturnAll('../Main', 'mp3') + ReturnAll('../Main', 'avi'):
+		'''for item in ReturnAll('../Main', 'mp4') + ReturnAll('../Main', 'mp3') + ReturnAll('../Main', 'avi'):
 			os.remove(item)
 		for item in ReturnAll('cleaned/', 'mp4'):
 			os.system('mv {} Video/{}'.format(item, item.partition('cleaned/')[2]))
 		for item in ReturnAll('cleaned/', 'wav'):
-			os.system('mv {} Audio/{}'.format(item, item.partition('cleaned/')[2]))
+			os.system('mv {} Audio/{}'.format(item, item.partition('cleaned/')[2]))'''

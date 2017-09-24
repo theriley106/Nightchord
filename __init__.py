@@ -3,6 +3,7 @@
 from tesserocr import PyTessBaseAPI, RIL
 import pyautogui
 import json
+import eyed3
 import os
 import bs4
 import subprocess

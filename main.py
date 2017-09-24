@@ -6,6 +6,7 @@ import json
 import base64
 import os
 import bs4
+import eyed3
 import pytesseract
 from moviepy.editor import VideoFileClip
 import billboard
@@ -248,11 +249,12 @@ def CombineVidandAudio(audio, video):
 	audio = str(audio).replace('.mp3', '')
 	video = str(video).replace('.mp4', '')
 	video = str(video).replace('.avi', '')
+	print video
 	filename = str(video).replace('.mp4', '')
-	os.system('ffmpeg -i {}.mp3 -i {}.avi -y -strict -2 {}z.mp4'.format(audio, video, filename))
+	os.system('ffmpeg -i {}.mp3 -i {}.mp4 -y -strict -2 {}z.mp4'.format(audio, video, filename))
 	#os.system('ffmpeg -i {} -i {} -c:v copy -c:a aac -strict experimental -map 0:v:0 -map 1:a:0 {}z.mp4'.format(video, audio, filename))
 	os.remove('{}.mp4'.format(filename))
-	os.system('mv {}z.mp4 -y {}.mp4'.format(filename, filename))
+	os.system('mv {}z.mp4 {}.mp4'.format(filename, filename))
 	#those weird lines above need to be done because FFMPEG doesn't correctly overwrite files
 	return '{}.mp4'.format(filename)
 
@@ -319,19 +321,15 @@ def YoutubeToFrames(url=None):
 		video = DownloadVideo(url, saveas='Vid.mp4')
 		ExtractFrames(video)
 
-def SpeedUpVideo(vidfile, percent=1.31):
-	if 'avi' in str(vidfile):
-		os.system('ffmpeg -i {} -c:a aac -b:a 128k -c:v libx264 -crf 23 {}.mp4'.format(vidfile, vidfile.replace('.avi', '')))
-		vidfile = vidfile.replace('.avi', '')
-	vidfile = vidfile.replace('.mp4', '')
-	os.system('ffmpeg -i {}.mp4 -y -vcodec copy -acodec copy {}.avi'.format(vidfile, vidfile))
-	os.system('mencoder -nosound -speed {} -o {}z.avi -ovc lavc {}.avi'.format(str(percent), vidfile, vidfile))
-	os.remove('{}.mp4'.format(vidfile))
-	os.system('ffmpeg -i {}z.avi -c:a aac -b:a 128k -c:v libx264 -crf 23 {}.mp4'.format(vidfile, vidfile))
-	os.remove('{}z.avi'.format(vidfile))
-	#os.remove('{}.mp4'.format(vidfile))
-	#os.system('mv {}z.mp4 {}.mp4'.format(vidfile, vidfile))
-	return '{}.mp4'.format(vidfile)
+def SpeedUpVideo(vidfile, percent=1.25):
+	print "Starting speed up video"
+	setpts = 1.0 / float(percent)
+	extension = ''.join(vidfile.partition('.')[1:])
+	saveas = vidfile.partition('.')[0] + 'z' + extension
+	os.system('ffmpeg -i {} -filter:v "setpts={}*PTS" {}'.format(vidfile, setpts, saveas))
+	os.system('rm {}'.format(vidfile))
+	os.system('mv {} {}'.format(saveas, vidfile))
+	return vidfile
 
 ######################################################################################
 ## OCR
@@ -613,7 +611,7 @@ def ExtractAudio(filename):
 
 def genCIL(file, v=2, speed=1.25, pitch=31, silence=1):
 	saveas = ReturnFileName(file)
-	os.system('sox -v {}.0 {} finished.mp3 speed {} pitch +{} silence 1 {} 0.1%'.format(v, file, speed, pitch, silence))
+	os.system('sox -v {}.0 {} finished.mp3 speed {} pitch +{}'.format(v, file, speed, pitch, silence))
 	os.system('mv finished.mp3 {}.mp3'.format(saveas))
 
 def clickFile():
@@ -645,7 +643,7 @@ def applyChain(file):
 	maxWindow()
 	time.sleep(1)
 	clickFile()
-	time.sleep(2)
+	time.sleep(2) 
 	clickApplyChain()
 	time.sleep(2)
 	clickApplyToFile()
@@ -657,6 +655,10 @@ def applyChain(file):
 
 ######################################################################################################
 ## Image
+
+def genVidFromFolder(folder, saveas="output.mp4"):
+	os.system("ffmpeg -framerate 1 -y -i {}/%d.png {}".format(folder, saveas))
+	return "{}/{}".format(folder, saveas)
 
 def draw_text_with_halo(img, position, text, font, col, halo_col):
 	halo = Image.new('RGBA', img.size, (0, 0, 0, 0))

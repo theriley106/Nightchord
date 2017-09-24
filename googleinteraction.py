@@ -51,12 +51,16 @@ class genOCR(object):
 		with open('tmp.json') as json_data:
 			d = json.load(json_data)
 		for i, lines in enumerate(d['responses']):
-			self.OCR[self.Files[i]] = lines['textAnnotations'][0]['description']
+			try:
+				self.OCR[self.Files[i]] = lines['textAnnotations'][0]['description']
+			except:
+				self.OCR[self.Files[i]] = ''
 		return self.OCR
-start = time.time()
+'''start = time.time()
 a = genOCR()
 for i in range(1,16):
-	a.addImage("the_front_bottoms_the_beers/{}.jpg".format(i))
-print a.returnCommand()
+	a.addImage("all_american_rejects_move_along/{}.jpg".format(i))
+for key, value in a.returnCommand().iteritems():
+	print key, value
 end = time.time()
-print(end - start)
+print(end - start)'''
