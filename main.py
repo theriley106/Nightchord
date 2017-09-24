@@ -3,6 +3,7 @@
 from tesserocr import PyTessBaseAPI, RIL
 import pyautogui
 import json
+import base64
 import os
 import bs4
 import pytesseract
@@ -27,6 +28,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 counter = {"lev": 500, "item": ""}
 lock = threading.Lock()
+APIKEY = open('apiKey.txt','r').read()
 class bcolors:
 	HEADER = '\033[95m'
 	OKBLUE = '\033[94m'
@@ -44,6 +46,39 @@ def PrintGood(goodtext):
 	print '\n' + bcolors.OKGREEN + goodtext + bcolors.ENDC
 ###############################################################################3
 ## Utilities
+
+def stripExtension(filename):
+	return filename[:filename.rfind('.')]
+
+def stripPath(filename):
+	return filename[filename.rfind('/') + 1:]
+
+def findPath(filename):
+	return filename[:filename.rfind('/') + 1]
+
+def convertBase(image):
+	return base64.b64encode(open(image, "rb").read())
+
+def genReqJson(image):
+	a = open("Request.json", "r").read()
+	a = a.replace('BASE', convertBase(image))
+	return str(json.dumps(a))
+	
+
+def genCurl(basefile):
+	a = 'curl -v -s -H "Content-Type: application/json" https://vision.googleapis.com/v1/images:annotate?key={} --data-binary @{}'.format(APIKEY, basefile)
+	return a
+
+def ocrImage(image):
+	inpu = open('Request.json', 'r')
+	out = open('Request.tmp', 'w')
+	out.write(inpu.read().replace('BASE', convertBase(image)))
+	out.close()
+	a = genCurl("Request.tmp")
+	os.system("{} > tmp.json".format(a))
+	with open('tmp.json') as json_data:
+	    d = json.load(json_data)
+	return d['responses'][0]['textAnnotations'][0]['description']
 
 def ReturnFileName(file):
 	return str(file).partition('.')[0]

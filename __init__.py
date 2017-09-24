@@ -336,6 +336,6 @@ if __name__ == "__main__":
 		words = ocrList(image)
 		a = removeNoise(words, lyrics)
 		print(a)'''
-	print str(APIKEY)
 	image = raw_input("image: ")
+	#image = '186.jpg'
 	print ocrImage(image)

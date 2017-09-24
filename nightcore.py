@@ -56,15 +56,25 @@ class nightcore(object):
 			except:
 				filename = items['url'].replace('https://www.youtube.com/watch?v=', '')
 			DownloadVideo(items['url'], saveas=filename)
-			#ExtractFrames(filename, filename)
-			#e = ReturnAll(filename, 'jpg')
-			#print(e)
+			ExtractFrames(filename, filename)
+			frames = {}
+			for file in ReturnAll(filename, 'jpg'):
+				try:
+					txt = ocrImage(file)
+					WriteToImage(file, txt, size=45)
+				except Exception as exp:
+					print exp
+				'''try:
+					frames[str(stripPath(stripExtension(file)))] = ocrImage(file)
+				except Exception as exp:
+					print exp'''
+			print frames
 			#genNC(image=e, artist=items['artist'], song=items['song'])
 			#CompareOCR(filename, filename)
-			ExtractAudio('{}.mp4'.format(filename))
+			#ExtractAudio('{}.mp4'.format(filename))
 			#applyChain('{}.mp3'.format(filename))
-			genCIL("{}.mp3".format(filename))
-			CombineAudioandImage('{}.mp3'.format(filename))
+			#genCIL("{}.mp3".format(filename))
+			#CombineAudioandImage('{}.mp3'.format(filename))
 
 		for item in ReturnAll('../Main', 'mp4') + ReturnAll('../Main', 'mp3') + ReturnAll('../Main', 'avi'):
 			os.remove(item)
