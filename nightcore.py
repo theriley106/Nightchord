@@ -96,7 +96,7 @@ class nightcore(object):
 			filename = "{}.mp4".format(filename)
 			l1 = GetDuration(audio)
 			print('start gen cil')
-			os.system('cp {} {}backup.{}'.format(filename, filename.partition('.')[0], filename.partition(".")[2]))
+			#os.system('cp {} {}backup.{}'.format(filename, filename.partition('.')[0], filename.partition(".")[2]))
 			genCIL(audio)
 			l2 = GetDuration(audio)
 			video = SpeedUpVideo(filename)
