@@ -3,6 +3,7 @@ from itertools import islice
 import googleinteraction
 import threading
 import time
+import writePic
 
 def chunk(it, size):
     it = iter(it)
@@ -84,7 +85,7 @@ class nightcore(object):
 			threads = []
 			f = 0
 			for key, value in results.iteritems():
-				t = threading.Thread(target=WriteToImage, args=(key, value))
+				t = threading.Thread(target=writePic.addText, args=(key, value))
 				threads.append(t)
 				t.start()
 				f = f + 1
