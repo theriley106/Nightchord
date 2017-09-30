@@ -3,6 +3,18 @@ import Image, ImageChops, ImageDraw, ImageFont, ImageFilter
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
+import pytesseract
+
+
+def removeSimilarImages(files):
+	filesToRemove = []
+	for i in range(len(files)):
+		try:
+			if float(abs(os.path.getsize(files[i]) - os.path.getsize(files[i+1]))) < 150:
+				filesToRemove.append(files[i+1])
+		except:
+			print "End of list"
+	return filesToRemove
 
 
 '''def WriteToImage(output, txt, size=45, input='background.jpg'):
@@ -30,6 +42,7 @@ from PIL import ImageDraw
 	i2.save('{}.png'.format(output))'''
 
 def addText(image, text, inputs='background.jpg', font='Royal.ttf', fontsize=75, x=300, y=300):
+	text = text.replace('\n', ' ').replace('\t', ' ')
 	image = str(image).replace('.png', '').replace('.jpg', '')
 	saveas = image + '.png'
 	background = inputs

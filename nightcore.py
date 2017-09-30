@@ -19,7 +19,9 @@ def createYoutube(URL=None, Speed=None, SaveAs=None):
 	ExtractAudio('{}.mp4'.format(filename))
 	applyChain('{}.mp3'.format(filename))
 	CombineAudioandImage('{}.mp3'.format(filename))
-#createYoutube()
+
+
+
 
 class nightcore(object):
 	#sources = []
@@ -68,7 +70,11 @@ class nightcore(object):
 			DownloadVideo(items['url'], saveas=filename)
 			ExtractFrames(filename, filename)
 			audio = ExtractAudio('{}.mp4'.format(filename))
+			deletedFiles = []
 			results = {}
+			for file in writePic.removeSimilarImages(ReturnAll(filename, 'jpg')):
+				deletedFiles.append(file)
+				os.system('rm {}'.format(file))
 			for filelist in list(chunk(ReturnAll(filename, 'jpg'), 16)):
 				a = googleinteraction.genOCR()
 				for file in filelist:
@@ -76,6 +82,7 @@ class nightcore(object):
 				info = a.returnCommand()
 				for key, value in info.iteritems():
 					results[key] = value
+
 			#WriteToImage(file, txt, size=45)
 				'''try:
 					frames[str(stripPath(stripExtension(file)))] = ocrImage(file)
@@ -93,6 +100,33 @@ class nightcore(object):
 					time.sleep(10)
 			for t in threads:
 				t.join()
+
+
+			for file in deletedFiles:
+				
+				i = int(str(file).partition('/')[2].partition('.')[0])
+				'''results[file] = None
+				while results[file] == None:
+					try:
+						e = str(results['{}/{}.{}'.format(str(file).partition('/')[0], i, str(file).partition('.')[2])])
+						if str(e) == "None":
+							Exception('e = None')
+						results[file] = e
+						print(results[file] + "done with deleted files")
+					except:
+						print("Raised exception")
+						i = i - 1'''
+				while os.path.exists('{}/{}.png'.format(str(file).partition('/')[0], i)) == False:
+					print '{}/{}.{}'.format(str(file).partition('/')[0], i, str(file).partition('.')[2])
+					print 'while os'
+					i = i - 1
+				if os.path.exists('{}/{}.png'.format(str(file).partition('/')[0], i)):
+					saveas = file.replace('.jpg', '.png')
+					postdash = str(file).partition('/')[0]
+					os.system('mv {}/{}.png {}'.format(postdash, i, saveas))
+					
+
+
 			video = genVidFromFolder(filename, "{}.mp4".format(filename))
 			filename = "{}.mp4".format(filename)
 			l1 = GetDuration(audio)
