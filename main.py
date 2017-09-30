@@ -289,6 +289,7 @@ def GrabSongLyrics(artist, song):
 ##########################################################################
 ## Video
 def ExtractFrames(video, folder=None):
+	f = 0
 	threads = []
 	def doCommand(videourl, folder, i):
 		print('Frame {} Completed'.format(i))
@@ -301,6 +302,9 @@ def ExtractFrames(video, folder=None):
 		t = threading.Thread(target=doCommand, args=(videourl, folder, i))
 		threads.append(t)
 		t.start()
+		f = f + 1
+		if f % 10 == 0:
+			time.sleep(2)
 	for t in threads:
 		t.join()	
 
@@ -609,7 +613,7 @@ def ExtractAudio(filename):
 	return '{}.mp3'.format(filename)
 	#I don't know why this returns anything.  ideally it should just be a boolean depending on if it worked or not
 
-def genCIL(file, v=2, speed=1.25, pitch=31, silence=1):
+def genCIL(file, v=2, speed=1.25, pitch=38, silence=1):
 	saveas = ReturnFileName(file)
 	os.system('sox -v {}.0 {} finished.mp3 speed {} pitch +{}'.format(v, file, speed, pitch, silence))
 	os.system('mv finished.mp3 {}.mp3'.format(saveas))

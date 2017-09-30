@@ -21,7 +21,15 @@ def createYoutube(URL=None, Speed=None, SaveAs=None):
 	CombineAudioandImage('{}.mp3'.format(filename))
 
 
+def removePics(filename):
+	deletedFiles = []
+	for file in writePic.removeSimilarImages(ReturnAll(filename, 'jpg')):
+		deletedFiles.append(file)
+		os.system('rm {}'.format(file))
+	return deletedFiles
 
+def genFileName(folder, i):
+	return '{}/{}.png'.format(str(folder).partition('/')[0], i)
 
 class nightcore(object):
 	#sources = []
@@ -67,76 +75,54 @@ class nightcore(object):
 				filename = '{}_{}'.format(items['artist'].replace(' ', '_'), items['song'].replace(' ', '_'))
 			except:
 				filename = items['url'].replace('https://www.youtube.com/watch?v=', '')
+
 			DownloadVideo(items['url'], saveas=filename)
-			ExtractFrames(filename, filename)
-			audio = ExtractAudio('{}.mp4'.format(filename))
-			deletedFiles = []
-			results = {}
-			for file in writePic.removeSimilarImages(ReturnAll(filename, 'jpg')):
-				deletedFiles.append(file)
-				os.system('rm {}'.format(file))
-			for filelist in list(chunk(ReturnAll(filename, 'jpg'), 16)):
-				a = googleinteraction.genOCR()
-				for file in filelist:
-					a.addImage(file)
-				info = a.returnCommand()
-				for key, value in info.iteritems():
-					results[key] = value
+			if self.ocr == True:
+				ExtractFrames(filename, filename)
+				totalFiles = len(ReturnAll(filename, 'jpg'))
+				audio = ExtractAudio('{}.mp4'.format(filename))
+				results = {}
+				removePics(filename)
+				for filelist in list(chunk(ReturnAll(filename, 'jpg'), 16)):
+					a = googleinteraction.genOCR()
+					for file in filelist:
+						a.addImage(file)
+					info = a.returnCommand()
+					for key, value in info.iteritems():
+						results[key] = value
+				print results
+				threads = []
+				f = 0
+				for key, value in results.iteritems():
+					t = threading.Thread(target=writePic.addText, args=(key, value))
+					threads.append(t)
+					t.start()
+					f = f + 1
+					if f % 10 == 0:
+						time.sleep(5)
+				for t in threads:
+					t.join()
 
-			#WriteToImage(file, txt, size=45)
-				'''try:
-					frames[str(stripPath(stripExtension(file)))] = ocrImage(file)
-				except Exception as exp:
-					print exp'''
-			print results
-			threads = []
-			f = 0
-			for key, value in results.iteritems():
-				t = threading.Thread(target=writePic.addText, args=(key, value))
-				threads.append(t)
-				t.start()
-				f = f + 1
-				if f % 10 == 0:
-					time.sleep(10)
-			for t in threads:
-				t.join()
-
-
-			for file in deletedFiles:
-				
-				i = int(str(file).partition('/')[2].partition('.')[0])
-				'''results[file] = None
-				while results[file] == None:
-					try:
-						e = str(results['{}/{}.{}'.format(str(file).partition('/')[0], i, str(file).partition('.')[2])])
-						if str(e) == "None":
-							Exception('e = None')
-						results[file] = e
-						print(results[file] + "done with deleted files")
-					except:
-						print("Raised exception")
-						i = i - 1'''
-				while os.path.exists('{}/{}.png'.format(str(file).partition('/')[0], i)) == False:
-					print '{}/{}.{}'.format(str(file).partition('/')[0], i, str(file).partition('.')[2])
-					print 'while os'
-					i = i - 1
-				if os.path.exists('{}/{}.png'.format(str(file).partition('/')[0], i)):
-					saveas = file.replace('.jpg', '.png')
-					postdash = str(file).partition('/')[0]
-					os.system('mv {}/{}.png {}'.format(postdash, i, saveas))
-					
-
-
-			video = genVidFromFolder(filename, "{}.mp4".format(filename))
-			filename = "{}.mp4".format(filename)
-			l1 = GetDuration(audio)
-			print('start gen cil')
-			#os.system('cp {} {}backup.{}'.format(filename, filename.partition('.')[0], filename.partition(".")[2]))
-			genCIL(audio)
-			l2 = GetDuration(audio)
-			video = SpeedUpVideo(filename)
-			print 'done with speed up'
-			return CombineVidandAudio(audio, video)
+				for i in range(1, totalFiles-1):
+					if os.path.exists(genFileName(filename, i+1)) == False:
+						os.system('cp {} {}'.format(genFileName(filename, i), genFileName(filename, i+1)))
+				os.system('rm {}'.format(genFileName(filename, 1)))
+				os.system('rm {}'.format(genFileName(filename, 2)))
+				video = genVidFromFolder(filename, "{}.mp4".format(filename))
+				filename = "{}.mp4".format(filename)
+				l1 = GetDuration(audio)
+				print('start gen cil')
+				genCIL(audio)
+				l2 = GetDuration(audio)
+				video = SpeedUpVideo(filename)
+				print 'done with speed up'
+				return CombineVidandAudio(audio, video)
+			else:
+				audio = ExtractAudio('{}.mp4'.format(filename))
+				genCIL(audio)
+				background = 'background.jpg'
+				saveas = filename + '.mp4'
+				os.system('ffmpeg -i {} -i {} -acodec libvo_aacenc -vcodec libx264 -y {}'.format(background, audio, saveas))
 			#genNC(image=e, artist=items['artist'], song=items['song'])
 			#CompareOCR(filename, filename)
 			#ExtractAudio('{}.mp4'.format(filename))
