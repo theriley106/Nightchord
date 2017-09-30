@@ -14,7 +14,7 @@ This program can generate Nightcore video by inputting one of the following para
 
 You can also pull song names from Billboard Top-X Charts to use for video generation.
 
-Essentially, this programs automates the process of Downloading/Remixing/Transcribing/Uploading Nightcore videos.  I have automated all of these processes using various techniques.  Everything I'm currently using is more of a proof of concept solution rather than a solution that's set to scale.  For instance, I'm using PyAutoGUI in conjunction with Audacity to remix Mp3 files, this is extremely computationally intensive compared to a CIL like SOX.  Regardless, this program is still under developement and I hope to improve the methods I'm using as the time goes on.
+Essentially, this programs automates the process of Downloading/Remixing/Transcribing/Uploading Nightcore videos.  I have automated all of these processes using various techniques.  Everything I'm currently using is more of a proof of concept solution rather than a solution that's set to scale.  
 
 Current Features:
 
@@ -31,15 +31,3 @@ Current Features:
 * Generate Word Coordinates in Lyric Videos
 * Calculate Amount of Spaces in a lyric video (To Improve Accuracy of OCR)
 * Write OCR results to an image with dynamic font choice
-
-To Do:
-
-* Implement the ability to scan a Spotify Playlist
-* Create a GUI for generating videos
-* Do everything from CIL tools rather than Audicity
-* Add the ability to generate Keywords and Video Descriptions
-* Post videos automatically
-* Graph the relationship between views and speed variables
-* Figure out a way to pick relevant Backgrounds (Scrape Wikipedia for Band Member gender and base off that?)
-* ^ Based off of that create a way to automatically change speed based on Gender of lead singer
-
