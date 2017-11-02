@@ -31,3 +31,7 @@ Current Features:
 * Generate Word Coordinates in Lyric Videos
 * Calculate Amount of Spaces in a lyric video (To Improve Accuracy of OCR)
 * Write OCR results to an image with dynamic font choice
+
+
+
+Time spent on this project: **~200hrs**
