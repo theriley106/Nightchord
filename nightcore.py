@@ -136,3 +136,5 @@ class nightcore(object):
 			os.system('mv {} Video/{}'.format(item, item.partition('cleaned/')[2]))
 		for item in ReturnAll('cleaned/', 'wav'):
 			os.system('mv {} Audio/{}'.format(item, item.partition('cleaned/')[2]))'''
+if __name__ == '__main__':
+	createYoutube()

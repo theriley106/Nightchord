@@ -64,7 +64,7 @@ def genReqJson(image):
 	a = open("Request.json", "r").read()
 	a = a.replace('BASE', convertBase(image))
 	return str(json.dumps(a))
-	
+
 
 def genCurl(basefile):
 	a = 'curl -v -s -H "Content-Type: application/json" https://vision.googleapis.com/v1/images:annotate?key={} --data-binary @{}'.format(APIKEY, basefile)
@@ -133,7 +133,7 @@ def LowestSetOfNumbers(wordslist, lyrics):
 	for t in threads:
 		t.join()
 	return process_item()
-		
+
 
 def PromptList(text, inputted):
 	PrintWarning('Initiated the list function\n')
@@ -230,7 +230,7 @@ def genYoutube(string):
 	VideoID = str(Results[0].select('.overflow-menu-choice')[0]).partition('data-video-ids="')[2].partition('" onclick="')[0]
 	URL = 'https://www.youtube.com/watch?v={}'.format(VideoID)
 	return URL
-	
+
 def GetDuration(clip):
 	if '.mp4' in str(clip):
 		return VideoFileClip(clip).duration
@@ -306,7 +306,7 @@ def ExtractFrames(video, folder=None):
 		if f % 10 == 0:
 			time.sleep(2)
 	for t in threads:
-		t.join()	
+		t.join()
 
 def CompareOCR(video, folder=None):
 	ExtractFrames(video, folder)
@@ -363,7 +363,7 @@ def RetrOCR(image=None, listofwords=[]):
 					WordsInImage.append(wordlyric)
 				except Exception as exp:
 					print exp
-				
+
 		WordsToSet = ' '.join(WordsInImage)
 		imagelocation = image[:image.rfind('/') + 1]
 		WriteToImage(image, WordsToSet, size=45, input=image)
@@ -434,7 +434,7 @@ def genCords(image=None, listofwords=[]):
 					print(exp)
 					PrintWarning("Error, the following text was ignored: \"{}\"\nThe program will continue running\n".format(text))
 			else:
-				AllWords.append(text)	
+				AllWords.append(text)
 	return AllWords
 
 def Spaces(image=None):
@@ -596,7 +596,7 @@ def genNC(image=None, listofwords=[], artist=None, song=None):
 		json.dump(Information, f)
 
 def readOCR(jsonfile):
-	with open(jsonfile) as data_file:    
+	with open(jsonfile) as data_file:
 		data = json.load(data_file)
 	for i in range(1, len(data)):
 		print('{}-{}'.format(i, data[str(i)]))
@@ -643,17 +643,23 @@ def maxWindow():
 
 def applyChain(file):
 	p = subprocess.Popen(["audacity", "./{}".format(file)])
-	time.sleep(7)
+	raw_input("Apply chain: ")
+	'''time.sleep(7)
 	maxWindow()
+	print("Clicked max window")
 	time.sleep(1)
 	clickFile()
-	time.sleep(2) 
+	print("Clicked file")
+	time.sleep(2)
 	clickApplyChain()
+	print("Clicked apply chain")
 	time.sleep(2)
 	clickApplyToFile()
+	print("Clicked apply to file")
 	time.sleep(10)
 	p.terminate()
-	print('Done')
+	print("Terminate p")
+	print('Done')'''
 
 
 
