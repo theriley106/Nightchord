@@ -2,18 +2,7 @@
 
 ### Python-Based music creation software, capable of converting a lyric video on Youtube into a [video like this](https://www.youtube.com/watch?v=ZbNzXQX542c)
 
-## Song List
-
-- [Nightcore - DNA](https://soundcloud.com/user-367430385/nightcore-dna)
-
-- [Nightcore - Broken Heart](https://soundcloud.com/user-367430385/nightcore-broken-heart)
-
-- [Nightcore - Psychopath](https://soundcloud.com/user-367430385/nightcore-psychopath)
-
-- [Nightcore - Empty Picture Frames](https://soundcloud.com/user-367430385/nightcore-empty-picture-frames)
-
-- [Nightcore - Come Home](https://soundcloud.com/user-367430385/nightcore-come-home)
-
+## Introduction
 
 I used this project as an introduction to Python Classes and to stregnthen my REGEX skills.
 
@@ -27,6 +16,18 @@ This program can generate Nightcore video by inputting one of the following para
 You can also pull song names from Billboard Top-X Charts to use for video generation.
 
 Essentially, this programs automates the process of Downloading/Remixing/Transcribing/Uploading Nightcore videos.  I have automated all of these processes using various techniques.  Everything I'm currently using is more of a proof of concept solution rather than a solution that's set to scale.
+
+## Song List (Audio Only)
+
+- [Nightcore - DNA](https://soundcloud.com/user-367430385/nightcore-dna)
+
+- [Nightcore - Broken Heart](https://soundcloud.com/user-367430385/nightcore-broken-heart)
+
+- [Nightcore - Psychopath](https://soundcloud.com/user-367430385/nightcore-psychopath)
+
+- [Nightcore - Empty Picture Frames](https://soundcloud.com/user-367430385/nightcore-empty-picture-frames)
+
+- [Nightcore - Come Home](https://soundcloud.com/user-367430385/nightcore-come-home)
 
 Current Features:
 
