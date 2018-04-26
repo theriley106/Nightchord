@@ -4,13 +4,16 @@
 
 ## Song List
 
-- [Nightcore - Psychopath](https://soundcloud.com/user-367430385/nightcore-psychopath)
+- [Nightcore - DNA](https://soundcloud.com/user-367430385/nightcore-dna)
 
 - [Nightcore - Broken Heart](https://soundcloud.com/user-367430385/nightcore-broken-heart)
+
+- [Nightcore - Psychopath](https://soundcloud.com/user-367430385/nightcore-psychopath)
 
 - [Nightcore - Empty Picture Frames](https://soundcloud.com/user-367430385/nightcore-empty-picture-frames)
 
 - [Nightcore - Come Home](https://soundcloud.com/user-367430385/nightcore-come-home)
+
 
 I used this project as an introduction to Python Classes and to stregnthen my REGEX skills.
 
