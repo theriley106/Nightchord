@@ -47,7 +47,7 @@ def genYoutube(string):
 	return URL
 
 def findSong(keyword):
-	return genYoutube('{} {} lyrics'.format(artist, song))
+	return genYoutube('{} lyrics'.format(keyword))
 
 def multiThreadedDownload():
 	songs = loadSongs()
