@@ -4,8 +4,12 @@ import bs4
 import requests
 
 def loadSongs():
+	listVal = []
 	songFile = raw_input("Song File: ")
-	return open(songFile).read().split("\n")
+	for val in open(songFile).read().split("\n"):
+		if len(val) > 1:
+			listVal.append(val)
+	return listVal
 
 def DownloadVideo(url, saveas='Vid.mp4'):
 	os.system("youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' --output {} {} 2> /dev/null".format(saveas, url))
