@@ -35,6 +35,10 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - London](https://soundcloud.com/user-367430385/nightcore-london-1)
 
+- [Nightcore - Give Me a Try](https://soundcloud.com/user-367430385/nightcore-give-me-a-try)
+
+
+
 
 
 Current Features:
