@@ -2,7 +2,7 @@ import threading
 import os
 import bs4
 import requests
-
+from main import *
 def loadSongs():
 	listVal = []
 	songFile = raw_input("Song File: ")
@@ -25,7 +25,7 @@ def ExtractAudio(filename):
 
 def createYoutube(keyword):
 	URL = findSong(keyword)
-	filename = '{}_{}'.format(keyword.replace(' ', '_'))
+	filename = '{}'.format(keyword.replace(' ', '_'))
 	DownloadVideo(URL, saveas=filename)
 	ExtractAudio('{}.mp4'.format(filename))
 	return
