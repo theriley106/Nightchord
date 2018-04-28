@@ -19,16 +19,12 @@ def ExtractAudio(filename):
 	#I don't know why this returns anything.  ideally it should just be a boolean depending on if it worked or not
 
 
-def createYoutube(URL=None, Speed=None, SaveAs=None):
-	if URL == None:
-		artist = raw_input('Artist: ')
-		song = raw_input('Song: ')
-		URL = findSong(artist, song)
-	filename = '{}_{}'.format(artist.replace(' ', '_'), song.replace(' ', '_'))
+def createYoutube(keyword):
+	URL = findSong(keyword)
+	filename = '{}_{}'.format(keyword.replace(' ', '_'))
 	DownloadVideo(URL, saveas=filename)
 	ExtractAudio('{}.mp4'.format(filename))
-	applyChain('{}.mp3'.format(filename))
-	CombineAudioandImage('{}.mp3'.format(filename))
+	return
 
 
 
@@ -46,8 +42,18 @@ def genYoutube(string):
 	URL = 'https://www.youtube.com/watch?v={}'.format(VideoID)
 	return URL
 
-def findSong(artist, song):
+def findSong(keyword):
 	return genYoutube('{} {} lyrics'.format(artist, song))
 
 def multiThreadedDownload():
+	songs = loadSongs()
+	# Sends all of the open instances to a specified URL
+	threads = [threading.Thread(target=createYoutube, args=(keyword,)) for keyword in songs]
+	# Creates a list of threads
+	for thread in threads:
+		# Starts all of them
+		thread.start()
+	for thread in threads:
+		# Joins them together so they exit at the same time
+		thread.join()
 
