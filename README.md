@@ -33,6 +33,8 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Arizona](https://soundcloud.com/user-367430385/nightcore-arizona)
 
+- [Nightcore - Fashionably Late](https://soundcloud.com/user-367430385/nightcore-fashionably-late)
+
 - [Nightcore - London](https://soundcloud.com/user-367430385/nightcore-london-1)
 
 - [Nightcore - Give Me a Try](https://soundcloud.com/user-367430385/nightcore-give-me-a-try)
