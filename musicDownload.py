@@ -57,3 +57,5 @@ def multiThreadedDownload():
 		# Joins them together so they exit at the same time
 		thread.join()
 
+if __name__ == '__main__':
+	multiThreadedDownload()
