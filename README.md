@@ -49,7 +49,7 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Boston](https://soundcloud.com/user-367430385/nightcore-boston)
 
-Current Features:
+## Current Features:
 
 * Create Video with Youtube URL
 * Create Video with Youtube Artist / Song
@@ -65,8 +65,8 @@ Current Features:
 * Calculate Amount of Spaces in a lyric video (To Improve Accuracy of OCR)
 * Write OCR results to an image with dynamic font choice
 
-To Do:
+## To Do:
 
 * Add Soundcloud Upload
 * Add auto tag editing for Soundcloud Uploads
-* Add a function to pull soundcloud stats
+* Add a function to pull Soundcloud stats
