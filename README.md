@@ -39,9 +39,7 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Give Me a Try](https://soundcloud.com/user-367430385/nightcore-give-me-a-try)
 
-
-
-
+- [Nightcore - Tie Die Dragon](https://soundcloud.com/user-367430385/nightcore-tie-die-dragon)
 
 Current Features:
 
