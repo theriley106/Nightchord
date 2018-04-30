@@ -65,3 +65,8 @@ Current Features:
 * Calculate Amount of Spaces in a lyric video (To Improve Accuracy of OCR)
 * Write OCR results to an image with dynamic font choice
 
+To Do:
+
+* Add Soundcloud Upload
+* Add auto tag editing for Soundcloud Uploads
+* Add a function to pull soundcloud stats
