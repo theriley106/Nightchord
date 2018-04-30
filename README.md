@@ -43,6 +43,9 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Out Of My League](https://soundcloud.com/user-367430385/nightcore-out-of-my-league)
 
+- [Nightcore - Far Too Young To Die](https://soundcloud.com/user-367430385/nightcore-far-too-young-to-die)
+
+
 Current Features:
 
 * Create Video with Youtube URL
