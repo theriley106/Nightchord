@@ -51,6 +51,8 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Reaper](https://soundcloud.com/user-367430385/nightcore-reaper)
 
+- [Nightcore - Holy Image Of Lies](https://soundcloud.com/user-367430385/nightcore-holy-image-of-lies)
+
 ## Current Features:
 
 * Create Video with Youtube URL
