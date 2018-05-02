@@ -5,3 +5,5 @@ headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleW
 res = requests.get('https://soundcloud.com/user-367430385/tracks', headers=headers)
 page = bs4.BeautifulSoup(res.text, 'lxml')
 print page.title.string
+for val in page.select(".sc-link-dark"):
+	print val.getText()
