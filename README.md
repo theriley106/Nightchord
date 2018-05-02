@@ -57,6 +57,9 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Thrash Unreal](https://soundcloud.com/user-367430385/nightcore-thrash-unreal)
 
+- [Nightcore - Counting Stars](https://soundcloud.com/user-367430385/nightcore-counting-stars)
+
+
 ## Current Features:
 
 * Create Video with Youtube URL
