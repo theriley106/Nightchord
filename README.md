@@ -55,6 +55,8 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Anxious Minds Think Alike](https://soundcloud.com/user-367430385/nightcore-anxious-minds-think-alike)
 
+- [Nightcore - Thrash Unreal](https://soundcloud.com/user-367430385/nightcore-thrash-unreal)
+
 ## Current Features:
 
 * Create Video with Youtube URL
