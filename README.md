@@ -67,6 +67,8 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Whisper To The Clouds](https://soundcloud.com/user-367430385/nightcore-whisper-to-the-clouds)
 
+- [Nightcore - Jamie All Over](https://soundcloud.com/user-367430385/nightcore-jamie-all-over)
+
 ## Current Features:
 
 * Create Video with Youtube URL
