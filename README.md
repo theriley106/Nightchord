@@ -53,6 +53,8 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 
 - [Nightcore - Holy Image Of Lies](https://soundcloud.com/user-367430385/nightcore-holy-image-of-lies)
 
+- [Nightcore - Anxious Minds Think Alike](https://soundcloud.com/user-367430385/nightcore-anxious-minds-think-alike)
+
 ## Current Features:
 
 * Create Video with Youtube URL
