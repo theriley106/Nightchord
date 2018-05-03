@@ -11,3 +11,5 @@
 *.pyc
 *.mkv
 apiKey.txt
+listOfClientIDs.txt
+authCode.txt
