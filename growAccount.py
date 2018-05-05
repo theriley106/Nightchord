@@ -25,21 +25,22 @@ except:
 
 listOfAccts = ["nightcore-3"]
 willFollow = 0
-followingMin = 100
+followingMin = 30
 likesMin = 100
 toFollow = []
 listOfFollowings = []
 # These are the people that the account is currently following
 
 def updateToFollow(followCount=None):
-	url = "https://api-v2.soundcloud.com/users/38122545/followers?&limit={}&client_id={}".format(LIMIT, clientID)
-	res = requests.get(url)
-	for val in res.json()['collection']:
-		#if (float(val['followings_count']) / float(val['followers_count']) * 100)
-		if (val['followings_count'] > followingMin) and (val['likes_count'] > likesMin):
-			if len(toFollow) <= followCount and (val['id'] not in listOfFollowings):
-				toFollow.append(val['id'])
-				print("{} - {}".format(val['permalink_url'], val['id']))
+	for i in range(0, LIMIT, 200):
+		url = "https://api-v2.soundcloud.com/users/38122545/followers?&offset={}&limit={}&client_id={}".format(i, LIMIT, clientID)
+		res = requests.get(url)
+		for val in res.json()['collection']:
+			#if (float(val['followings_count']) / float(val['followers_count']) * 100)
+			if (val['followings_count'] > followingMin) and (val['likes_count'] > likesMin):
+				if len(toFollow) <= followCount and (val['id'] not in listOfFollowings):
+					toFollow.append(val['id'])
+					print("{} - {}".format(val['permalink_url'], val['id']))
 
 def updateCurrentFollowing(actID='438591654'):
 	url = 'https://api-v2.soundcloud.com/users/{}/followings?limit={}&client_id={}'.format(actID, LIMIT, clientID)
@@ -79,6 +80,7 @@ if __name__ == '__main__':
 	updateCurrentFollowing()
 	# Updates list of users that are currently being followed
 	updateToFollow(raw_input("How many users do you want to follow: "))
+	print len(toFollow)
 	for val in toFollow:
 		follow(val)
 
