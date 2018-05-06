@@ -2,7 +2,7 @@ import requests
 import random
 import time
 import random
-LIMIT = 1000
+LIMIT = 10000
 # This is the result limit
 
 try:
@@ -32,8 +32,9 @@ listOfFollowings = []
 # These are the people that the account is currently following
 
 def updateToFollow(followCount=None):
-	for i in range(0, LIMIT, 200):
-		url = "https://api-v2.soundcloud.com/users/38122545/followers?&offset={}&limit={}&client_id={}".format(i, LIMIT, clientID)
+	offset = None
+	url = "https://api-v2.soundcloud.com/users/38122545/followers?&limit=200&client_id={}".format(clientID)
+	while len(toFollow) < followCount:
 		res = requests.get(url)
 		for val in res.json()['collection']:
 			#if (float(val['followings_count']) / float(val['followers_count']) * 100)
@@ -41,6 +42,7 @@ def updateToFollow(followCount=None):
 				if len(toFollow) <= followCount and (val['id'] not in listOfFollowings):
 					toFollow.append(val['id'])
 					print("{} - {}".format(val['permalink_url'], val['id']))
+		url = res.json()['next_href'] + "&client_id={}".format(clientID)
 
 def updateCurrentFollowing(actID='438591654'):
 	url = 'https://api-v2.soundcloud.com/users/{}/followings?limit={}&client_id={}'.format(actID, LIMIT, clientID)
@@ -79,7 +81,7 @@ def follow(idVal):
 if __name__ == '__main__':
 	updateCurrentFollowing()
 	# Updates list of users that are currently being followed
-	updateToFollow(raw_input("How many users do you want to follow: "))
+	updateToFollow(int(raw_input("How many users do you want to follow: ")))
 	print len(toFollow)
 	for val in toFollow:
 		follow(val)
