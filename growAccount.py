@@ -31,6 +31,10 @@ toFollow = []
 listOfFollowings = []
 # These are the people that the account is currently following
 
+def getFollowingsCount():
+	res = requests.get("https://api-mobi.soundcloud.com/resolve?permalink_url=https%3A//soundcloud.com/user-367430385&client_id=iZIs9mchVcX5lhVRyQGGAYlNPVldzAoX&format=json&app_version=1524734136")
+	return res.json()['followings_count']
+
 def updateToFollow(followCount=None):
 	offset = None
 	url = "https://api-v2.soundcloud.com/users/38122545/followers?&limit=200&client_id={}".format(clientID)
@@ -45,10 +49,20 @@ def updateToFollow(followCount=None):
 		url = res.json()['next_href'] + "&client_id={}".format(clientID)
 
 def updateCurrentFollowing(actID='438591654'):
+	followings = getFollowingsCount()
 	url = 'https://api-v2.soundcloud.com/users/{}/followings?limit={}&client_id={}'.format(actID, LIMIT, clientID)
-	res = requests.get(url)
-	for val in res.json()['collection']:
-		listOfFollowings.append(val['id'])
+	while len(listOfFollowings) < followings:
+		try:
+			res = requests.get(url)
+			for val in res.json()['collection']:
+				listOfFollowings.append(val['id'])
+			url = res.json()['next_href'] + "&client_id={}".format(clientID)
+		except:
+			pass
+		print("Finished searching page")
+
+
+
 
 def follow(idVal):
 	headers = {
