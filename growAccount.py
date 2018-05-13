@@ -32,7 +32,7 @@ listOfFollowings = []
 # These are the people that the account is currently following
 
 def getFollowingsCount():
-	res = requests.get("https://api-mobi.soundcloud.com/resolve?permalink_url=https%3A//soundcloud.com/user-367430385&client_id=iZIs9mchVcX5lhVRyQGGAYlNPVldzAoX&format=json&app_version=1524734136")
+	res = requests.get("https://api-mobi.soundcloud.com/resolve?permalink_url=https%3A//soundcloud.com/user-367430385&client_id={}&format=json&app_version=1524734136".format(clientID))
 	return res.json()['followings_count']
 
 def updateToFollow(followCount=None):
