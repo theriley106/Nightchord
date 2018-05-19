@@ -2,6 +2,10 @@
 
 ### Python-Based music creation software, capable of converting a lyric video on Youtube into a [video like this](https://www.youtube.com/watch?v=ZbNzXQX542c)
 
+<p align="center">
+  <img src="src/images/Logo.png" width="350"/>
+</p>
+
 ### Checkout the [Nightchord Soundcloud](https://soundcloud.com/user-367430385)
 
 ## Introduction
