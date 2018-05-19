@@ -2,6 +2,8 @@ import json
 import requests
 import random
 import os
+import growAccount
+LIMIT = 200
 
 idList = []
 for val in open("listOfClientIDs.txt").read().split("\n"):
@@ -62,9 +64,37 @@ def updateUserList(userInfo):
 	print("Updated")
 	return
 
+
+def grabAllFollowings(actID='438591654'):
+	listOfFollowings = []
+	url = 'https://api-v2.soundcloud.com/users/{}/followings?limit={}&client_id={}'.format(actID, LIMIT, clientID)
+	while len(listOfFollowings) < 700:
+		try:
+			res = requests.get(url)
+			for val in res.json()['collection']:
+				listOfFollowings.append(val)
+			if res.json()['next_href'] == None:
+				print("{} Followings Checked".format(len(listOfFollowings)))
+				return listOfFollowings
+			else:
+				url = str(res.json()['next_href'] + "&client_id={}".format(clientID))
+		except Exception as exp:
+			print exp
+			pass
+		print("Finished searching page")
+	print("{} Followings Checked".format(len(listOfFollowings)))
+	return listOfFollowings
+
+def getUserInfo(userID):
+	for val in USERINFO:
+		if str(val['id']) == str(userID):
+			return val
+
 if __name__ == '__main__':
 	url = "https://api-v2.soundcloud.com/users/38122545/followings?&limit=200&client_id={}".format(clientID)
 	res = requests.get(url)
-	for val in res.json()['collection']:
+	url = res.json()['next_href'] + "&client_id={}".format(clientID)
+
+	for val in grabAllFollowings():
 		#addFollower(val)
 		updateUserList(val)
