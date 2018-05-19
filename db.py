@@ -116,9 +116,20 @@ def getUserInfo(userID):
 		if str(val['id']) == str(userID):
 			return val
 
+def unfollowUser(userID):
+	params = (
+	    ('client_id', clientID),
+	    ('app_locale', 'en'),
+	)
+	response = requests.delete('https://api-v2.soundcloud.com/me/followings/{}'.format(userID), params=params, data="null")
+
+
 def update():
 	grabAllFollowings()
 	grabAllFollowers()
 
 if __name__ == '__main__':
+	unfollowUser("31109873")
+	raw_input("Unfollowed")
+	raw_input(getUserInfo("9390837"))
 	update()
