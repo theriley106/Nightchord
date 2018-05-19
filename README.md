@@ -2,6 +2,8 @@
 
 ### Python-Based music creation software, capable of converting a lyric video on Youtube into a [video like this](https://www.youtube.com/watch?v=ZbNzXQX542c)
 
+### Checkout the [Nightchord Soundcloud](https://soundcloud.com/user-367430385)
+
 ## Introduction
 
 I used this project as an introduction to Python Classes and to stregnthen my REGEX skills.
