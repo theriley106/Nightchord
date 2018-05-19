@@ -96,3 +96,7 @@ Essentially, this programs automates the process of Downloading/Remixing/Transcr
 * Add Soundcloud Upload
 * Add auto tag editing for Soundcloud Uploads
 * Add a function to pull Soundcloud stats
+
+## Acknowledgments
+
+Huge shoutout to @tebriz159 for the AMAZING logo :)
