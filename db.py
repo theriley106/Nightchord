@@ -44,14 +44,14 @@ def updateUser(userInfo):
 	DATABASE["userIDs"].append(userInfo['id'])
 
 def addFollower(userInfo):
-	if userInfo['id'] in DATABASE["userIDs"]:
-		updateUser(userInfo)
-	else:
-		DATABASE["userIDs"].append(userInfo['id'])
-		DATABASE["users"].append(userInfo)
 	if userInfo['id'] not in DATABASE["followers"]:
 		DATABASE["followers"].append(userInfo['id'])
-	updateDB()
+		updateDB()
+
+def addFollowing(userInfo):
+	if userInfo['id'] not in DATABASE["followings"]:
+		DATABASE["followings"].append(userInfo['id'])
+		updateDB()
 
 def updateUserList(userInfo):
 	for val in USERINFO:
@@ -68,11 +68,13 @@ def updateUserList(userInfo):
 def grabAllFollowings(actID='438591654'):
 	listOfFollowings = []
 	url = 'https://api-v2.soundcloud.com/users/{}/followings?limit={}&client_id={}'.format(actID, LIMIT, clientID)
-	while len(listOfFollowings) < 700:
+	while True:
 		try:
 			res = requests.get(url)
 			for val in res.json()['collection']:
 				listOfFollowings.append(val)
+				updateUserList(val)
+				addFollowing(val)
 			if res.json()['next_href'] == None:
 				print("{} Followings Checked".format(len(listOfFollowings)))
 				return listOfFollowings
@@ -83,6 +85,30 @@ def grabAllFollowings(actID='438591654'):
 			pass
 		print("Finished searching page")
 	print("{} Followings Checked".format(len(listOfFollowings)))
+
+	return listOfFollowings
+
+def grabAllFollowers(actID='438591654'):
+	listOfFollowings = []
+	url = 'https://api-v2.soundcloud.com/users/{}/followers?limit={}&client_id={}'.format(actID, LIMIT, clientID)
+	while True:
+		try:
+			res = requests.get(url)
+			for val in res.json()['collection']:
+				listOfFollowings.append(val)
+				updateUserList(val)
+				addFollower(val)
+			if res.json()['next_href'] == None:
+				print("{} Followers Checked".format(len(listOfFollowings)))
+				return listOfFollowings
+			else:
+				url = str(res.json()['next_href'] + "&client_id={}".format(clientID))
+		except Exception as exp:
+			print exp
+			pass
+		print("Finished searching page")
+	print("{} Followers Checked".format(len(listOfFollowings)))
+
 	return listOfFollowings
 
 def getUserInfo(userID):
@@ -90,11 +116,9 @@ def getUserInfo(userID):
 		if str(val['id']) == str(userID):
 			return val
 
-if __name__ == '__main__':
-	url = "https://api-v2.soundcloud.com/users/38122545/followings?&limit=200&client_id={}".format(clientID)
-	res = requests.get(url)
-	url = res.json()['next_href'] + "&client_id={}".format(clientID)
+def update():
+	grabAllFollowings()
+	grabAllFollowers()
 
-	for val in grabAllFollowings():
-		#addFollower(val)
-		updateUserList(val)
+if __name__ == '__main__':
+	update()
