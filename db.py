@@ -3,6 +3,7 @@ import requests
 import random
 import os
 import growAccount
+import time
 LIMIT = 200
 
 idList = []
@@ -89,27 +90,26 @@ def grabAllFollowings(actID='438591654'):
 	return listOfFollowings
 
 def grabAllFollowers(actID='438591654'):
-	listOfFollowings = []
+	listOfFollowers = []
 	url = 'https://api-v2.soundcloud.com/users/{}/followers?limit={}&client_id={}'.format(actID, LIMIT, clientID)
 	while True:
 		try:
 			res = requests.get(url)
 			for val in res.json()['collection']:
-				listOfFollowings.append(val)
+				listOfFollowers.append(val)
 				updateUserList(val)
 				addFollower(val)
 			if res.json()['next_href'] == None:
-				print("{} Followers Checked".format(len(listOfFollowings)))
-				return listOfFollowings
+				print("{} Followers Checked".format(len(listOfFollowers)))
+				return listOfFollowers
 			else:
 				url = str(res.json()['next_href'] + "&client_id={}".format(clientID))
 		except Exception as exp:
 			print exp
 			pass
 		print("Finished searching page")
-	print("{} Followers Checked".format(len(listOfFollowings)))
-
-	return listOfFollowings
+	print("{} Followers Checked".format(len(listOfFollowers)))
+	return listOfFollowers
 
 def getUserInfo(userID):
 	for val in USERINFO:
@@ -117,19 +117,18 @@ def getUserInfo(userID):
 			return val
 
 def unfollowUser(userID):
-	params = (
-	    ('client_id', clientID),
-	    ('app_locale', 'en'),
-	)
-	response = requests.delete('https://api-v2.soundcloud.com/me/followings/{}'.format(userID), params=params, data="null")
-
+	url = 'https://api-v2.soundcloud.com/me/followings/{}?&client_id={}'.format(userID, clientID)
+	print url
+	sleepTime = round(random.uniform(1.0, 20.0), 2)
+	print("Unfollowing {} in {} Seconds".format(userID, sleepTime))
+	time.sleep(sleepTime)
+	response = requests.delete(url)
+	print("Unfollowed: {}".format(userID))
 
 def update():
 	grabAllFollowings()
 	grabAllFollowers()
 
 if __name__ == '__main__':
-	unfollowUser("31109873")
-	raw_input("Unfollowed")
-	raw_input(getUserInfo("9390837"))
+	unfollowUser("17778617")
 	update()

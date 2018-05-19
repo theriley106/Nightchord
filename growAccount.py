@@ -2,6 +2,7 @@ import requests
 import random
 import time
 import random
+import db
 LIMIT = 10000
 # This is the result limit
 
@@ -43,7 +44,7 @@ def updateToFollow(followCount=None):
 		for val in res.json()['collection']:
 			#if (float(val['followings_count']) / float(val['followers_count']) * 100)
 			if (val['followings_count'] > followingMin) and (val['likes_count'] > likesMin):
-				if len(toFollow) <= followCount and (val['id'] not in listOfFollowings):
+				if len(toFollow) <= followCount and (val['id'] not in db.DATABASE["followings"]):
 					toFollow.append(val['id'])
 					print("{} - {}".format(val['permalink_url'], val['id']))
 		url = res.json()['next_href'] + "&client_id={}".format(clientID)
@@ -92,12 +93,51 @@ def follow(idVal):
 
 	requests.post('https://api-v2.soundcloud.com/me/followings/{}'.format(idVal), headers=headers, params=params, data=data)
 
+def unfollowUser(userID):
+	headers = {
+		'Pragma': 'no-cache',
+		'Origin': 'https://soundcloud.com',
+		'Accept-Encoding': 'gzip, deflate, br',
+		'Accept-Language': 'en-US,es-US;q=0.8,es;q=0.6,ru-BY;q=0.4,ru;q=0.2,en;q=0.2',
+		'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/60.0.3112.113 Chrome/60.0.3112.113 Safari/537.36',
+		'Content-Type': 'application/json',
+		'Accept': 'application/json, text/javascript, */*; q=0.1',
+		'Cache-Control': 'no-cache',
+		'Authorization': authCode,
+		'Connection': 'keep-alive',
+		'Referer': 'https://soundcloud.com/',
+	}
+	sleepTime = round(random.uniform(1.0, 20.0), 2)
+	print("Unfollowing {} in {} Seconds".format(userID, sleepTime))
+	time.sleep(sleepTime)
+
+	params = (
+    ('client_id', clientID),
+    ('app_version', '1526649907'),
+    ('app_locale', 'en'),
+	)
+
+	data = 'null'
+	response = requests.delete('https://api-v2.soundcloud.com/me/followings/{}'.format(userID), headers=headers, params=params, data=data)
+	print("Unfollowed: {}".format(userID))
+
 if __name__ == '__main__':
-	updateCurrentFollowing()
+	'''updateCurrentFollowing()
 	# Updates list of users that are currently being followed
 	updateToFollow(int(raw_input("How many users do you want to follow: ")))
 	print len(toFollow)
 	for val in toFollow:
+		follow(val)'''
+	db.update()
+	# Updates the current database
+	'''for val in db.grabAllFollowings()[:25]:
+		unfollowUser(val['id'])
+	raw_input("Finished Unfollowings: ")'''
+	updateToFollow(25)
+	for val in toFollow:
 		follow(val)
+	db.update()
+
+
 
 
