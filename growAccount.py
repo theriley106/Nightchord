@@ -121,7 +121,14 @@ def unfollowUser(userID):
 	response = requests.delete('https://api-v2.soundcloud.com/me/followings/{}'.format(userID), headers=headers, params=params, data=data)
 	print("Unfollowed: {}".format(userID))
 
+def doAction(actionDict):
+	if actionDict['Type'] == 'Unfollow':
+		unfollowUser(actionDict['User'])
+	else:
+		follow(actionDict['User'])
+
 if __name__ == '__main__':
+	tDict = []
 	'''updateCurrentFollowing()
 	# Updates list of users that are currently being followed
 	updateToFollow(int(raw_input("How many users do you want to follow: ")))
@@ -133,9 +140,11 @@ if __name__ == '__main__':
 	followCount = int(raw_input("How many people do you want to follow? ")) + random.randint(1, 9)
 	unfollowCount = random.randint(1, 10) + followCount
 	for val in db.grabAllFollowings()[:unfollowCount]:
-		unfollowUser(val['id'])
-	raw_input("Finished Unfollowings: ")
+		tDict.append({"Type": "Unfollow", "User": val['id']})
 	updateToFollow(followCount)
 	for val in toFollow:
-		follow(val)
+		tDict.append({"Type": "Follow", "User": val})
+	random.shuffle(tDict)
+	for val in tDict:
+		doAction(val)
 	db.update()
