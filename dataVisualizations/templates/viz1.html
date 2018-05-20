@@ -1,0 +1,45 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <title>Soundcloud Followers Like to Following Ratio</title>
+    <script src="{{ url_for('static',filename='js/Chart.bundle.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/utils.js') }}"></script>
+    <style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+    </style>
+</head>
+
+<body>
+    <canvas id="bar-chart-grouped"></canvas>
+    <script>
+
+new Chart(document.getElementById("bar-chart-grouped"), {
+    type: 'bar',
+    data: {
+      labels: [{% for info in DATABASE %}"{{ info.ID }}",{% endfor %}],
+      datasets: [
+        {
+          label: "Like to Following Ratio",
+          backgroundColor: "#3e95cd",
+          data: [{% for info in DATABASE %}"{{ info.Ratio }}",{% endfor %}]
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Soundcloud Followers Like to Following Ratio'
+      }
+    }
+});
+
+</script>
+</body>
+
+</html>
