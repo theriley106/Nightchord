@@ -130,14 +130,12 @@ if __name__ == '__main__':
 		follow(val)'''
 	db.update()
 	# Updates the current database
-	'''for val in db.grabAllFollowings()[:25]:
+	followCount = int(raw_input("How many people do you want to follow? ")) + random.randint(1, 9)
+	unfollowCount = random.randint(1, 10) + followCount
+	for val in db.grabAllFollowings()[:unfollowCount]:
 		unfollowUser(val['id'])
-	raw_input("Finished Unfollowings: ")'''
-	updateToFollow(25)
+	raw_input("Finished Unfollowings: ")
+	updateToFollow(followCount)
 	for val in toFollow:
 		follow(val)
 	db.update()
-
-
-
-
