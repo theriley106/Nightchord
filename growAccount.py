@@ -122,10 +122,13 @@ def unfollowUser(userID):
 	print("Unfollowed: {}".format(userID))
 
 def doAction(actionDict):
-	if actionDict['Type'] == 'Unfollow':
-		unfollowUser(actionDict['User'])
-	else:
-		follow(actionDict['User'])
+	try:
+		if actionDict['Type'] == 'Unfollow':
+			unfollowUser(actionDict['User'])
+		else:
+			follow(actionDict['User'])
+	except:
+		print "Error"
 
 if __name__ == '__main__':
 	tDict = []
