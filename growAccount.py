@@ -40,14 +40,17 @@ def updateToFollow(followCount=None):
 	offset = None
 	url = "https://api-v2.soundcloud.com/users/38122545/followers?&limit=200&client_id={}".format(clientID)
 	while len(toFollow) < followCount:
-		res = requests.get(url)
-		for val in res.json()['collection']:
-			#if (float(val['followings_count']) / float(val['followers_count']) * 100)
-			if (val['followings_count'] > followingMin) and (val['likes_count'] > likesMin):
-				if len(toFollow) <= followCount and (val['id'] not in db.DATABASE["followings"]):
-					toFollow.append(val['id'])
-					print("{} - {}".format(val['permalink_url'], val['id']))
-		url = res.json()['next_href'] + "&client_id={}".format(clientID)
+		try:
+			res = requests.get(url)
+			for val in res.json()['collection']:
+				#if (float(val['followings_count']) / float(val['followers_count']) * 100)
+				if (val['followings_count'] > followingMin) and (val['likes_count'] > likesMin):
+					if len(toFollow) <= followCount and (val['id'] not in db.DATABASE["followings"]):
+						toFollow.append(val['id'])
+						print("{} - {}".format(val['permalink_url'], val['id']))
+			url = res.json()['next_href'] + "&client_id={}".format(clientID)
+		except:
+			print res.json()
 
 def updateCurrentFollowing(actID='438591654'):
 	followings = getFollowingsCount()
