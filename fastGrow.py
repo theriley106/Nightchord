@@ -154,3 +154,8 @@ if __name__ == '__main__':
 	for val in tDict:
 		doAction(val)
 	db.update()
+	try:
+		import sendText
+		sendText.sendText("50 Followers have been added...")
+	except:
+		print("Error...")
