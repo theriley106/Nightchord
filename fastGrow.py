@@ -24,7 +24,7 @@ try:
 except:
 	authCode = raw_input("Auth Code: ")
 
-listOfAccts = ["nightcore-3"]
+listOfAccts = ["Nightcore4ev3r"]
 willFollow = 0
 followingMin = 30
 likesMin = 100
@@ -38,7 +38,7 @@ def getFollowingsCount():
 
 def updateToFollow(followCount=None):
 	offset = None
-	url = "https://api-v2.soundcloud.com/users/38122545/followers?&limit=200&client_id={}".format(clientID)
+	url = "https://api-v2.soundcloud.com/users/9390837/followers?&limit=200&client_id={}".format(clientID)
 	while len(toFollow) < followCount:
 		try:
 			res = requests.get(url)
@@ -49,8 +49,8 @@ def updateToFollow(followCount=None):
 						toFollow.append(val['id'])
 						print("{} - {}".format(val['permalink_url'], val['id']))
 			url = res.json()['next_href'] + "&client_id={}".format(clientID)
-		except:
-			print res.json()
+		except Exception as exp:
+			print exp
 
 def updateCurrentFollowing(actID='438591654'):
 	followings = getFollowingsCount()
