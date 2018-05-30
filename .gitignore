@@ -16,3 +16,4 @@ authCode.txt
 archive/
 !src/images/Logo.png
 !src/*.png
+sendText.py
