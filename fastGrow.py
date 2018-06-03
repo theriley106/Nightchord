@@ -24,7 +24,7 @@ try:
 except:
 	authCode = raw_input("Auth Code: ")
 
-listOfAccts = ["Nightcore4ev3r"]
+listOfAccts = ["notixx", "kranoxd", "djsoulshard", "ieuan-williams-4"]
 willFollow = 0
 followingMin = 30
 likesMin = 100
