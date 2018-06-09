@@ -143,7 +143,7 @@ if __name__ == '__main__':
 		follow(val)'''
 	db.update()
 	# Updates the current database
-	followCount = int(50 + random.randint(1, 9))
+	followCount = int(15 + random.randint(1, 9))
 	unfollowCount = random.randint(1, 10) + followCount
 	for val in db.grabAllFollowings()[:unfollowCount]:
 		tDict.append({"Type": "Unfollow", "User": val['id']})
