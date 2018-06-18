@@ -2,6 +2,7 @@ import requests
 import random
 import time
 import random
+import datetime
 import db
 LIMIT = 10000
 # This is the result limit
@@ -85,7 +86,6 @@ def follow(idVal):
 	sleepTime = round(random.uniform(1.0, 20.0), 2)
 	print("Following {} in {} Seconds".format(idVal, sleepTime))
 	time.sleep(sleepTime)
-
 	params = (
 		('client_id', clientID),
 		('app_version', '1525260260'),
@@ -94,7 +94,11 @@ def follow(idVal):
 
 	data = 'null'
 
-	requests.post('https://api-v2.soundcloud.com/me/followings/{}'.format(idVal), headers=headers, params=params, data=data)
+	a = requests.post('https://api-v2.soundcloud.com/me/followings/{}'.format(idVal), headers=headers, params=params, data=data)
+	if str(a.text).lower() == 'true':
+		return True
+	else:
+		return False
 
 def unfollowUser(userID):
 	headers = {
@@ -127,35 +131,56 @@ def unfollowUser(userID):
 def doAction(actionDict):
 	try:
 		if actionDict['Type'] == 'Unfollow':
-			unfollowUser(actionDict['User'])
+			e = unfollowUser(actionDict['User'])
+			return 1
 		else:
-			follow(actionDict['User'])
+			e = follow(actionDict['User'])
+			return e
 	except:
 		print "Error"
+		return 0
 
 if __name__ == '__main__':
-	tDict = []
-	'''updateCurrentFollowing()
-	# Updates list of users that are currently being followed
-	updateToFollow(int(raw_input("How many users do you want to follow: ")))
-	print len(toFollow)
-	for val in toFollow:
-		follow(val)'''
-	db.update()
-	# Updates the current database
-	followCount = int(15 + random.randint(1, 9))
-	unfollowCount = random.randint(1, 10) + followCount
-	for val in db.grabAllFollowings()[:unfollowCount]:
-		tDict.append({"Type": "Unfollow", "User": val['id']})
-	updateToFollow(followCount)
-	for val in toFollow:
-		tDict.append({"Type": "Follow", "User": val})
-	random.shuffle(tDict)
-	for val in tDict:
-		doAction(val)
-	db.update()
-	try:
-		import sendText
-		sendText.sendText("50 Followers have been added...")
-	except:
-		print("Error...")
+	currentHour = datetime.datetime.now().hour
+	if (currentHour < 23 and currentHour > 7):
+		if random.randint(0, 3) == 3:
+			sleepDuration = random.randint(0, 60*55)
+			print("Sleeping for {} seconds".format(sleepDuration))
+			time.sleep(sleepDuration)
+			tDict = []
+			followTrueCt = 0
+			followFalseCt = 0
+			errorCt = 0
+			unfollowCt = 0
+			'''updateCurrentFollowing()
+			# Updates list of users that are currently being followed
+			updateToFollow(int(raw_input("How many users do you want to follow: ")))
+			print len(toFollow)
+			for val in toFollow:
+				follow(val)'''
+			db.update()
+			# Updates the current database
+			followCount = int(random.randint(1, 4))
+			unfollowCount = int(random.randint(1, 4))
+			for val in db.grabAllFollowings()[:unfollowCount]:
+				tDict.append({"Type": "Unfollow", "User": val['id']})
+			updateToFollow(followCount)
+			for val in toFollow:
+				tDict.append({"Type": "Follow", "User": val})
+			random.shuffle(tDict)
+			for val in tDict:
+				f = doAction(val)
+				if f == True:
+					followTrueCt += 1
+				if f == False:
+					followFalseCt += 1
+				if f == 0:
+					errorCt += 1
+				if f == 1:
+					unfollowCt += 1
+			db.update()
+			try:
+				import sendText
+				sendText.sendText("Soundcloud Update: {} Follows ({} Failed) | {} Unfollows | {} Errors".format(followTrueCt, followFalseCt, unfollowCt, errorCt))
+			except:
+				print("Error...")
