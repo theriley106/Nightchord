@@ -142,7 +142,7 @@ def doAction(actionDict):
 
 if __name__ == '__main__':
 	currentHour = datetime.datetime.now().hour
-	if (currentHour < 2 and currentHour > 9):
+	if (currentHour <= 2 or currentHour >= 9):
 		if random.randint(0, 3) == 3:
 			sleepDuration = random.randint(0, 60*55)
 			print("Sleeping for {} seconds".format(sleepDuration))
