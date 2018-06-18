@@ -184,3 +184,5 @@ if __name__ == '__main__':
 				sendText.sendText("Soundcloud Update: {} Follows ({} Failed) | {} Unfollows | {} Errors".format(followTrueCt, followFalseCt, unfollowCt, errorCt))
 			except:
 				print("Error...")
+	else:
+		print("Outside of time period")
