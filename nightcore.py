@@ -4,21 +4,37 @@ import googleinteraction
 import threading
 import time
 import writePic
+import os
+
+TMP_DIR = "toClean"
+try:
+	os.system("mkdir {}".format(TMP_DIR))
+except:
+	pass
 
 def chunk(it, size):
     it = iter(it)
     return iter(lambda: tuple(islice(it, size)), ())
 
 def createYoutube(URL=None, Speed=None, SaveAs=None):
+	listOfInputs = []
 	if URL == None:
-		artist = raw_input('Artist: ')
-		song = raw_input('Song: ')
-		URL = findSong(artist, song)
-	filename = '{}_{}'.format(artist.replace(' ', '_'), song.replace(' ', '_'))
-	DownloadVideo(URL, saveas=filename)
-	ExtractAudio('{}.mp4'.format(filename))
-	applyChain('{}.mp3'.format(filename))
-	CombineAudioandImage('{}.mp3'.format(filename))
+		while True:
+			artist = raw_input('Artist: ')
+			if len(artist) == 0:
+				break
+			song = raw_input('Song: ')
+			listOfInputs.append({"artist": artist, "song": song})
+	for val in listOfInputs:
+		URL = findSong(val['artist'], val['song'])
+		filename = '{}_{}'.format(val['artist'].replace(' ', '_'), val['song'].replace(' ', '_'))
+		val['filename'] = filename
+		DownloadVideo(URL, saveas=filename)
+		a = ExtractAudio('{}.mp4'.format(filename))
+		os.system("mv {} {}/{}.mp3".format(a, TMP_DIR, a))
+	os.system("audacity")
+	#applyChain('{}.mp3'.format(filename))
+	#CombineAudioandImage('{}.mp3'.format(filename))
 
 
 def removePics(filename):
