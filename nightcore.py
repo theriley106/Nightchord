@@ -6,12 +6,9 @@ import time
 import writePic
 import os
 
-TMP_DIR = "toClean"
-try:
-	os.system("mkdir {}".format(TMP_DIR))
-except:
-	pass
-
+TMP_DIR = "musicFiles"
+if not os.path.exists(TMP_DIR):
+    os.makedirs(TMP_DIR)
 def chunk(it, size):
     it = iter(it)
     return iter(lambda: tuple(islice(it, size)), ())
