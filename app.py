@@ -21,11 +21,14 @@ def download():
 	artist = request.args.get("artist")
 	song = request.args.get("song")
 	fileName = nightcore.createYoutubeCLI(artist, song)
+	fileNameNew = fileName[::-1].partition("/")[0][::-1]
+	os.system("mv {} static/{}".format(fileName, fileNameNew))
+	return redirect(url_for('index', fileName=fileNameNew))
 	return send_from_directory(directory="", filename=fileName)
 
-@app.route('/', methods=['GET'])
-def index():
-	return render_template("viz.html", fileURL='http://127.0.0.1:5000/static/final8.mp3')
+@app.route('/<fileName>', methods=['GET'])
+def index(fileName="final8.mp3"):
+	return render_template("viz.html", fileURL='http://127.0.0.1:5000/static/{}'.format(fileName))
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=5000, debug=True)
