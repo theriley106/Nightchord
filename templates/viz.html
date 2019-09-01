@@ -29,7 +29,7 @@
     <body>
         <div id="wrapper">
             <div id="visualizer_wrapper">
-                <canvas id='canvas' width="800" height="350"></canvas>
+                <canvas id='canvas' width="800px" height="350px"></canvas>
             </div>
         </div>
         <script type="text/javascript">
@@ -65,6 +65,7 @@
                     window.cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.msCancelAnimationFrame;
                     try {
                         this.audioContext = new AudioContext();
+                        window.audioContext = this.audioContext;
                     } catch (e) {
                         this._updateInfo('!Your browser does not support AudioContext', false);
                         console.log(e);
@@ -212,6 +213,18 @@
                     
                 }
             }
+        </script>
+        <script>
+        setTimeout(
+                function(){
+                    console.log("TESTING THIS");
+                    if(window.audioContext.state !== 'running') {
+                    window.audioContext.resume();
+                 }
+             }, 2000
+            )
+                
+
         </script>
     </body>
 </html>
