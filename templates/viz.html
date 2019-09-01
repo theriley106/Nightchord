@@ -68,6 +68,7 @@
                 ini: function() {
                     this._prepareAPI();
                     this._addEventListner();
+                    this._start();
                 },
                 _prepareAPI: function() {
                     //fix browser vender for AudioContext and requestAnimationFrame
@@ -86,12 +87,17 @@
                         audioInput = document.getElementById('uploadedFile'),
                         dropContainer = document.getElementsByTagName("canvas")[0];
                     //listen the file upload
+                    console.log(audioInput);
+                    // that._start();
                     audioInput.onchange = function() {
+                        console.log("DCHANGED");
+                        console.log("AYYY");
                         if (that.audioContext===null) {return;};
 
                         //the if statement fixes the file selction cancle, because the onchange will trigger even the file selection been canceled
                         if (audioInput.files.length !== 0) {
                             //only process the first file
+                            console.log(audioInput);
                             that.file = audioInput.files[0];
                             that.fileName = that.file.name;
                             if (that.status === 1) {
@@ -137,32 +143,46 @@
                     }, false);
                 },
                 _start: function() {
+                    console.log("STARTING");
                     //read and decode the file into audio array buffer
                     var that = this,
-                        file = this.file,
-                        fr = new FileReader();
-                    fr.onload = function(e) {
-                        var fileResult = e.target.result;
-                        var audioContext = that.audioContext;
-                        if (audioContext === null) {
-                            return;
-                        };
-                        that._updateInfo('Decoding the audio', true);
-                        audioContext.decodeAudioData(fileResult, function(buffer) {
+                        file = this.file;
+                    // var fileResult = e.target.result;
+                    var audioContext = that.audioContext;
+                    that._updateInfo('Decoding the audio', true);
+                    console.log("ONLOAD");
+
+                    var audioURL='http://127.0.0.1:5000/static/final8.mp3';
+
+                    //creating a new request
+                    var request = new XMLHttpRequest();
+                    request.open("GET",audioURL,true);
+                    request.responseType= 'arraybuffer';
+
+                    request.onload = function(){
+
+                        //take the audio from http request and decode it in an audio buffer
+                        audioContext.decodeAudioData(request.response, function(buffer){
+                          audioBuffer = buffer;
+                          console.log(audioBuffer);
+                          if(audioBuffer){  // check here
                             that._updateInfo('Decode succussfully,start the visualizer', true);
                             that._visualize(audioContext, buffer);
-                        }, function(e) {
+                            // playSound();
+                          }
+                        }, function(e){
                             that._updateInfo('!Fail to decode the file', false);
-                            console.log(e);
+                            console.log(e + "AYYYYY");
                         });
+                        this._updateInfo('Starting read the file', true);
+                        console.log("TRYING TO RUN");
+                        // fr.readAsArrayBuffer(request.response);
+
                     };
-                    fr.onerror = function(e) {
-                        that._updateInfo('!Fail to read the file', false);
-                        console.log(e);
-                    };
-                    //assign the file to the reader
-                    this._updateInfo('Starting read the file', true);
-                    fr.readAsArrayBuffer(file);
+
+                    request.send();
+                //assign the file to the reader
+                    
                 },
                 _visualize: function(audioContext, buffer) {
                     var audioBufferSouceNode = audioContext.createBufferSource(),
@@ -193,6 +213,7 @@
                         that._audioEnd(that);
                     };
                     this._updateInfo('Playing ' + this.fileName, false);
+                    console.log(this.fileName);
                     this.info = 'Playing ' + this.fileName;
                     document.getElementById('fileWrapper').style.opacity = 0.2;
                     this._drawSpectrum(analyser);
@@ -289,12 +310,8 @@
             }
         </script>
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-46794744-3', 'duapp.com');
-            ga('send', 'pageview');
+        setTimeout(function(){console.log("RUNNING");document.getElementById('uploadedFile').innerHTML = "AYYYYY";}, 2000);
         </script>
+        <h1> new </h1>
     </body>
 </html>
