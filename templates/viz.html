@@ -28,10 +28,6 @@
     </head>
     <body>
         <div id="wrapper">
-            <div id="fileWrapper" class="file_wrapper">
-                <label for="uploadedFile">Drag&drop or select a file to play:</label>
-                <input type="file" id="uploadedFile"></input>
-            </div>
             <div id="visualizer_wrapper">
                 <canvas id='canvas' width="800" height="350"></canvas>
             </div>
@@ -147,7 +143,6 @@
                     this._updateInfo('Playing ' + this.fileName, false);
                     console.log(this.fileName);
                     this.info = 'Playing ' + this.fileName;
-                    document.getElementById('fileWrapper').style.opacity = 0.2;
                     this._drawSpectrum(analyser);
                 },
                 _drawSpectrum: function(analyser) {
@@ -213,18 +208,13 @@
                     };
                     this.status = 0;
                     var text = 'HTML5 Audio API showcase | An Audio Viusalizer';
-                    document.getElementById('fileWrapper').style.opacity = 1;
                     instance.info = text;
-                    document.getElementById('uploadedFile').value = '';
                 },
                 _updateInfo: function(text, processing) {
                     console.log(text);
                     
                 }
             }
-        </script>
-        <script>
-        setTimeout(function(){console.log("RUNNING");document.getElementById('uploadedFile').innerHTML = "AYYYYY";}, 2000);
         </script>
         <h1> new </h1>
     </body>
