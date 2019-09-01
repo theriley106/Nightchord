@@ -7,11 +7,26 @@ import writePic
 import os
 
 TMP_DIR = "musicFiles"
+
+SOX_COMMAND = "sox -S {0}/{1} {0}/{2}  speed 1.35 pitch +200 bass +10 vol 1.0 && rm {0}/{1}"
 if not os.path.exists(TMP_DIR):
     os.makedirs(TMP_DIR)
 def chunk(it, size):
     it = iter(it)
     return iter(lambda: tuple(islice(it, size)), ())
+
+def createYoutubeCLI(artist, song):
+	listOfInputs = []
+	listOfInputs.append({"artist": artist, "song": song})
+	for val in listOfInputs:
+		URL = findSong(val['artist'], val['song'])
+		filename = '{}_{}'.format(val['artist'].replace(' ', '_'), val['song'].replace(' ', '_'))
+		val['filename'] = filename
+		DownloadVideo(URL, saveas=filename)
+		a = ExtractAudio('{}.mp4'.format(filename))
+		os.system("mv {} {}/{}".format(a, TMP_DIR, a))
+	os.system(SOX_COMMAND.format(TMP_DIR, a, a.partition('.')[0] + "_final.mp3"))
+	return "{}/{}".format(TMP_DIR, a.partition('.')[0] + "_final.mp3")
 
 def createYoutube(URL=None, Speed=None, SaveAs=None):
 	listOfInputs = []
@@ -28,8 +43,10 @@ def createYoutube(URL=None, Speed=None, SaveAs=None):
 		val['filename'] = filename
 		DownloadVideo(URL, saveas=filename)
 		a = ExtractAudio('{}.mp4'.format(filename))
-		os.system("mv {} {}/{}.mp3".format(a, TMP_DIR, a))
-	os.system("audacity")
+		os.system("mv {} {}/{}".format(a, TMP_DIR, a))
+	os.system(SOX_COMMAND.format(TMP_DIR, a, a.partition('.')[0] + "_final.mp3"))
+
+	#os.system("audacity")
 	#applyChain('{}.mp3'.format(filename))
 	#CombineAudioandImage('{}.mp3'.format(filename))
 
