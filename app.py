@@ -25,7 +25,7 @@ def download():
 
 @app.route('/', methods=['GET'])
 def index():
-	return render_template("viz.html")
+	return render_template("viz.html", fileURL='http://127.0.0.1:5000/static/final8.mp3')
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=5000, debug=True)
