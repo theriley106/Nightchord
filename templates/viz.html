@@ -29,9 +29,6 @@
     <body>
         <div id="wrapper">
             <div id="fileWrapper" class="file_wrapper">
-                <div id="info">
-                    HTML5 Audio API showcase | An Audio Viusalizer
-                </div>
                 <label for="uploadedFile">Drag&drop or select a file to play:</label>
                 <input type="file" id="uploadedFile"></input>
             </div>
@@ -57,7 +54,6 @@
                 this.fileName = null, //the current file name
                 this.audioContext = null,
                 this.source = null, //the audio source
-                this.info = document.getElementById('info').innerHTML, //this used to upgrade the UI information
                 this.infoUpdateId = null, //to sotore the setTimeout ID and clear the interval
                 this.animationId = null,
                 this.status = 0, //flag for sound is playing 1 or stopped 0
@@ -89,27 +85,6 @@
                     //listen the file upload
                     console.log(audioInput);
                     // that._start();
-                    audioInput.onchange = function() {
-                        console.log("DCHANGED");
-                        console.log("AYYY");
-                        if (that.audioContext===null) {return;};
-
-                        //the if statement fixes the file selction cancle, because the onchange will trigger even the file selection been canceled
-                        if (audioInput.files.length !== 0) {
-                            //only process the first file
-                            console.log(audioInput);
-                            that.file = audioInput.files[0];
-                            that.fileName = that.file.name;
-                            if (that.status === 1) {
-                                //the sound is still playing but we upload another file, so set the forceStop flag to true
-                                that.forceStop = true;
-                            };
-                            document.getElementById('fileWrapper').style.opacity = 1;
-                            that._updateInfo('Uploading', true);
-                            //once the file is ready,start the visualizer
-                            that._start();
-                        };
-                    };
                     //listen the drag & drop
                     dropContainer.addEventListener("dragenter", function() {
                         document.getElementById('fileWrapper').style.opacity = 1;
@@ -279,7 +254,6 @@
                     this.status = 0;
                     var text = 'HTML5 Audio API showcase | An Audio Viusalizer';
                     document.getElementById('fileWrapper').style.opacity = 1;
-                    document.getElementById('info').innerHTML = text;
                     instance.info = text;
                     document.getElementById('uploadedFile').value = '';
                 },
