@@ -166,15 +166,12 @@
                           audioBuffer = buffer;
                           console.log(audioBuffer);
                           if(audioBuffer){  // check here
-                            that._updateInfo('Decode succussfully,start the visualizer', true);
                             that._visualize(audioContext, buffer);
                             // playSound();
                           }
                         }, function(e){
-                            that._updateInfo('!Fail to decode the file', false);
                             console.log(e + "AYYYYY");
                         });
-                        this._updateInfo('Starting read the file', true);
                         console.log("TRYING TO RUN");
                         // fr.readAsArrayBuffer(request.response);
 
@@ -287,25 +284,8 @@
                     document.getElementById('uploadedFile').value = '';
                 },
                 _updateInfo: function(text, processing) {
-                    var infoBar = document.getElementById('info'),
-                        dots = '...',
-                        i = 0,
-                        that = this;
-                    infoBar.innerHTML = text + dots.substring(0, i++);
-                    if (this.infoUpdateId !== null) {
-                        clearTimeout(this.infoUpdateId);
-                    };
-                    if (processing) {
-                        //animate dots at the end of the info text
-                        var animateDot = function() {
-                            if (i > 3) {
-                                i = 0
-                            };
-                            infoBar.innerHTML = text + dots.substring(0, i++);
-                            that.infoUpdateId = setTimeout(animateDot, 250);
-                        }
-                        this.infoUpdateId = setTimeout(animateDot, 250);
-                    };
+                    console.log(text);
+                    
                 }
             }
         </script>
