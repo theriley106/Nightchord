@@ -8,7 +8,11 @@
 
 ## Introduction
 
-I used this project as an introduction to Python Classes and to stregnthen my REGEX skills.
+I started working on this project almost 2 years ago, but I just recently started getting back into it after seeing the stats on SoundCloud.
+
+I originally used this project to learn about more advanced Python topics, and the code in this repo is extremely disorganized and confusing.
+
+I'm working on rewriting the way you generate songs to make it easier for others to use.  
 
 This program can generate Nightcore video by inputting one of the following paramters:
 
