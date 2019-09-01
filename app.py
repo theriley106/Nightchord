@@ -16,5 +16,9 @@ def song():
 	os.system("rm  {}".format(file.replace('.mp4', '.mp3')))
 	return send_from_directory(directory="", filename=file)
 
+@app.route('/', methods=['GET'])
+def index():
+	return render_template("viz.html")
+
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=5000, debug=True)
