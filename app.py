@@ -16,6 +16,13 @@ def song():
 	os.system("rm  {}".format(file.replace('.mp4', '.mp3')))
 	return send_from_directory(directory="", filename=file)
 
+@app.route('/download/', methods=["GET"])
+def download():
+	artist = request.args.get("artist")
+	song = request.args.get("song")
+	fileName = nightcore.createYoutubeCLI(artist, song)
+	return send_from_directory(directory="", filename=fileName)
+
 @app.route('/', methods=['GET'])
 def index():
 	return render_template("viz.html")
