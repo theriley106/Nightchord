@@ -63,7 +63,6 @@
             Visualizer.prototype = {
                 ini: function() {
                     this._prepareAPI();
-                    this._addEventListner();
                     this._start();
                 },
                 _prepareAPI: function() {
@@ -77,45 +76,6 @@
                         this._updateInfo('!Your browser does not support AudioContext', false);
                         console.log(e);
                     }
-                },
-                _addEventListner: function() {
-                    var that = this,
-                        audioInput = document.getElementById('uploadedFile'),
-                        dropContainer = document.getElementsByTagName("canvas")[0];
-                    //listen the file upload
-                    console.log(audioInput);
-                    // that._start();
-                    //listen the drag & drop
-                    dropContainer.addEventListener("dragenter", function() {
-                        document.getElementById('fileWrapper').style.opacity = 1;
-                        that._updateInfo('Drop it on the page', true);
-                    }, false);
-                    dropContainer.addEventListener("dragover", function(e) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        //set the drop mode
-                        e.dataTransfer.dropEffect = 'copy';
-                    }, false);
-                    dropContainer.addEventListener("dragleave", function() {
-                        document.getElementById('fileWrapper').style.opacity = 0.2;
-                        that._updateInfo(that.info, false);
-                    }, false);
-                    dropContainer.addEventListener("drop", function(e) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        if (that.audioContext===null) {return;};
-                        document.getElementById('fileWrapper').style.opacity = 1;
-                        that._updateInfo('Uploading', true);
-                        //get the dropped file
-                        that.file = e.dataTransfer.files[0];
-                        if (that.status === 1) {
-                            document.getElementById('fileWrapper').style.opacity = 1;
-                            that.forceStop = true;
-                        };
-                        that.fileName = that.file.name;
-                        //once the file is ready,start the visualizer
-                        that._start();
-                    }, false);
                 },
                 _start: function() {
                     console.log("STARTING");
