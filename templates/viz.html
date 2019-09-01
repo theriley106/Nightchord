@@ -214,17 +214,22 @@
                 }
             }
         </script>
-        <script>
-        setTimeout(
-                function(){
-                    console.log("TESTING THIS");
-                    if(window.audioContext.state !== 'running') {
-                    window.audioContext.resume();
-                 }
-             }, 2000
-            )
-                
+        <button onclick="start()">PLAY</button>
+        <button onclick="pause()">PAUSE</button>
 
+        <script>
+        function start() {
+            console.log("STARTING");
+            if(window.audioContext.state !== 'running') {
+                window.audioContext.resume();
+            }
+        }
+        function pause() {
+            console.log("PAUSING");
+            if(window.audioContext.state === 'running') {
+                window.audioContext.suspend();
+            }
+        }
         </script>
     </body>
 </html>
