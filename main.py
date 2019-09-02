@@ -613,7 +613,6 @@ def ExtractAudio(filename):
 	video = VideoFileClip(filename.replace(".mp4", "") + ".mp4")
 	video.audio.write_audiofile(filename + ".mp3")
 	return '{}.mp3'.format(filename)
-	#I don't know why this returns anything.  ideally it should just be a boolean depending on if it worked or not
 
 def genCIL(file, v=2, speed=1.25, pitch=38, silence=1):
 	saveas = ReturnFileName(file)
