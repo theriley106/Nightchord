@@ -17,7 +17,7 @@ def song():
 	os.system("rm  {}".format(file.replace('.mp4', '.mp3')))
 	return send_from_directory(directory="", filename=file)
 
-@app.route('/downloadFile/<fileName>', methods=["GET"])
+# @app.route('/downloadFile/<fileName>', methods=["GET"])
 def downloadFile(fileName=None):
 	if fileName == None:
 		return "<h1>Invalid File</h1>"
@@ -41,6 +41,8 @@ def download():
 
 @app.route('/<fileName>', methods=['GET'])
 def index(fileName="final8.mp3"):
+	if request.args.get("download", False) != False:
+		return downloadFile(fileName)
 	return render_template("viz.html", fileURL='http://127.0.0.1:5000/static/{}'.format(fileName))
 
 if __name__ == '__main__':
