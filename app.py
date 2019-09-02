@@ -34,8 +34,8 @@ def download():
 			fileNameNew = fileName[::-1].partition("/")[0][::-1]
 			os.system("mv {} static/{}".format(fileName, fileNameNew))
 			return redirect(url_for('index', fileName=fileNameNew))
-		except:
-			print("ERROR ON LOADING")
+		except Exception as exp:
+			print(exp)
 			time.sleep(i*2)
 	return "<h1>ERROR PLEASE TRY AGAIN LATER</h1>"
 
