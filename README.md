@@ -25,6 +25,26 @@ You can also pull song names from Billboard Top-X Charts to use for video genera
 
 Essentially, this programs automates the process of Downloading/Remixing/Transcribing/Uploading Nightcore videos.  I have automated all of these processes using various techniques.  Everything I'm currently using is more of a proof of concept solution rather than a solution that's set to scale.
 
+## API (New)
+
+In an effort to make this program easier to use for generating music, I created a web app that allows you to input song information and it will automatically generate a nightcore version of the song.
+
+```bash
+$ python app.py
+* Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+...
+```
+
+Visit the following url:
+
+'''http://localhost:5000/download/?artist={any artist}&song={any song name}```
+
+And it should generate a new nightcore song and redirect to an audio visualization in your browser.
+
+<p align="center">
+  <img src="static/viz.gif" width="400"/>
+</p>
+
 ## Song List (Audio Only)
 
 - [Nightcore - DNA](https://soundcloud.com/user-367430385/nightcore-dna)
