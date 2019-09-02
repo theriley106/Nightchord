@@ -8,7 +8,7 @@ import os
 
 TMP_DIR = "musicFiles"
 
-SOX_COMMAND = "sox -S {0}/{1} {0}/{2}  speed 1.35 pitch +200 bass +10 vol 1.0 && rm {0}/{1}"
+SOX_COMMAND = "sox -S {0}/{1} {0}/{2} speed 1.35 pitch +200 bass +10 vol 1.0 silence 1 0.1 1% && rm {0}/{1}"
 if not os.path.exists(TMP_DIR):
     os.makedirs(TMP_DIR)
 def chunk(it, size):

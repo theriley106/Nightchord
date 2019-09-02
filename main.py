@@ -17,7 +17,7 @@ import csv
 import subprocess
 import re
 from PyLyrics import *
-import Image, ImageChops, ImageDraw, ImageFont, ImageFilter
+#import Image, ImageChops, ImageDraw, ImageFont, ImageFilter
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
