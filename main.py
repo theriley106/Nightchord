@@ -608,8 +608,10 @@ def readOCR(jsonfile):
 
 def ExtractAudio(filename):
 	#This receives a .mp4 file but it removes .mp4 because the alternative seemed confusing af
-	filename = str(filename).replace('.mp4', '')
-	os.system('ffmpeg -i {}.mp4 -y {}.mp3'.format(filename, filename))
+	#filename = str(filename).replace('.mp4', '')
+	#os.system('ffmpeg -i {}.mp4 -y {}.mp3'.format(filename, filename))
+	video = VideoFileClip(filename.replace(".mp4", "") + ".mp4")
+	video.audio.write_audiofile(filename + ".mp3")
 	return '{}.mp3'.format(filename)
 	#I don't know why this returns anything.  ideally it should just be a boolean depending on if it worked or not
 
