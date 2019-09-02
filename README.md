@@ -37,7 +37,7 @@ $ python app.py
 
 Visit the following url:
 
-'''http://localhost:5000/download/?artist={any artist}&song={any song name}```
+```http://localhost:5000/download/?artist={any artist}&song={any song name}```
 
 And it should generate a new nightcore song and redirect to an audio visualization in your browser.
 
