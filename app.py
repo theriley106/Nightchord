@@ -26,6 +26,7 @@ def downloadFile(fileName=None):
 
 @app.route('/download/', methods=["GET"])
 def download():
+	exp = "ERROR PLEASE TRY AGAIN LATER"
 	for i in range(1,4):
 		try:
 			artist = request.args.get("artist")
@@ -37,7 +38,7 @@ def download():
 		except Exception as exp:
 			print(exp)
 			time.sleep(i*2)
-	return "<h1>ERROR PLEASE TRY AGAIN LATER</h1>"
+	return "<h1>{}</h1>".format(exp)
 
 @app.route('/<fileName>', methods=['GET'])
 def index(fileName="final8.mp3"):
