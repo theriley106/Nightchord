@@ -3,6 +3,7 @@ from datetime import datetime
 import csv
 import os
 import nightcore
+import time
 
 app = Flask(__name__)
 
@@ -16,15 +17,27 @@ def song():
 	os.system("rm  {}".format(file.replace('.mp4', '.mp3')))
 	return send_from_directory(directory="", filename=file)
 
+@app.route('/downloadFile/<fileName>', methods=["GET"])
+def downloadFile(fileName=None):
+	if fileName == None:
+		return "<h1>Invalid File</h1>"
+	return send_file("static/"+fileName, attachment_filename=fileName, as_attachment=True)
+
+
 @app.route('/download/', methods=["GET"])
 def download():
-	artist = request.args.get("artist")
-	song = request.args.get("song")
-	fileName = nightcore.createYoutubeCLI(artist, song)
-	fileNameNew = fileName[::-1].partition("/")[0][::-1]
-	os.system("mv {} static/{}".format(fileName, fileNameNew))
-	return redirect(url_for('index', fileName=fileNameNew))
-	return send_from_directory(directory="", filename=fileName)
+	for i in range(1,4):
+		try:
+			artist = request.args.get("artist")
+			song = request.args.get("song")
+			fileName = nightcore.createYoutubeCLI(artist, song)
+			fileNameNew = fileName[::-1].partition("/")[0][::-1]
+			os.system("mv {} static/{}".format(fileName, fileNameNew))
+			return redirect(url_for('index', fileName=fileNameNew))
+		except:
+			print("ERROR ON LOADING")
+			time.sleep(i*2)
+	return "<h1>ERROR PLEASE TRY AGAIN LATER</h1>"
 
 @app.route('/<fileName>', methods=['GET'])
 def index(fileName="final8.mp3"):
