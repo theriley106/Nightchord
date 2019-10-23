@@ -4,6 +4,7 @@ import requests
 import bs4
 import random
 import csv
+import time
 
 TMP_DIR = "musicFiles"
 
@@ -73,13 +74,20 @@ def createYoutubeCLI(artist, song):
 	listOfInputs = []
 	listOfInputs.append({"artist": artist, "song": song})
 	for val in listOfInputs:
-		URL = findSong(val['artist'], val['song'])
-		filename = '{}_{}'.format(val['artist'].replace(' ', '_'), val['song'].replace(' ', '_'))
-		val['filename'] = filename
-		DownloadVideo(URL, saveas=filename)
-		a = ExtractAudio('{}.mp4'.format(filename))
-		os.system("mv {} {}/{}".format(a, TMP_DIR, a))
-	os.system(SOX_COMMAND.format(TMP_DIR, a, a.partition('.')[0] + "_final.mp3"))
+		#URL = findSong(val['artist'], val['song'])
+		# filename = '{}_{}'.format(val['artist'].replace(' ', '_'), val['song'].replace(' ', '_'))
+		# val['filename'] = filename
+		# DownloadVideo(URL, saveas=filename)
+		# a = ExtractAudio('{}.mp4'.format(filename))
+		a = "{0}_{1}.mp3".format(artist.replace(" ", "_"), song.replace(" ", "_"))
+		wavVersion = a.replace(".mp3", ".wav")
+		os.system('youtube-dl --extract-audio --audio-format mp3 -o "{}" "ytsearch:{} {} lyrics"'.format(a, artist, song))
+		os.system("ffmpeg -i {} {}".format(a, wavVersion))
+		time.sleep(3)
+		os.system("cp {} {}/{}".format(wavVersion, TMP_DIR, wavVersion))
+	# raw_input(SOX_COMMAND.format(TMP_DIR, a, a.partition('.')[0] + "_final.mp3"))
+	os.system(SOX_COMMAND.format(TMP_DIR, wavVersion, a.partition('.')[0] + "_final.mp3"))
+	os.system("rm {} && rm {}".format(wavVersion, a))
 	return "{}/{}".format(TMP_DIR, a.partition('.')[0] + "_final.mp3")
 
 if __name__ == '__main__':
