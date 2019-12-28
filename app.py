@@ -4,8 +4,14 @@ import csv
 import os
 import nightcore
 import time
+import random
+import glob
 
 app = Flask(__name__)
+
+@app.route('/image', methods=['GET'])
+def returnImage():
+	return send_file(random.choice(list(glob.glob("static/nightcorepics/*"))), mimetype='image/gif')
 
 @app.route('/nightcore/', methods=['POST'])
 def song():
