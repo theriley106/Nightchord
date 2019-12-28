@@ -12,18 +12,18 @@ I started working on this project almost 2 years ago, but I just recently starte
 
 I originally used this project to learn about more advanced Python topics, and the code in this repo is extremely disorganized and confusing.
 
-I'm working on rewriting the way you generate songs to make it easier for others to use.  
+I'm working on rewriting the way you generate songs to make it a bit easier for others to use.  
 
-This program can generate Nightcore video by inputting one of the following paramters:
+This program can generate Nightcore videos by inputting one of the following paramters:
 
  * Youtube URL
  * Artist / Song Name
  * Locally Saved MP4/AVI
  * Locally Saved MP3
 
-You can also pull song names from Billboard Top-X Charts to use for video generation.
+You can also pull song names from Billboard Top-X Charts for video generation.
 
-Essentially, this programs automates the process of Downloading/Remixing/Transcribing/Uploading Nightcore videos.  I have automated all of these processes using various techniques.  Everything I'm currently using is more of a proof of concept solution rather than a solution that's set to scale.
+Essentially, this programs automates the process of Downloading/Remixing/Transcribing/Uploading Nightcore videos.  I have automated all of these, but everything I'm currently using is more of a proof of concept solution rather than something that's set to scale.
 
 ## API (New)
 
