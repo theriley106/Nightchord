@@ -25,7 +25,7 @@
                 color:#aaa;
             }
             body{text-align: center;background: #f2f6f8;}
-.img{position:absolute;z-index:1;}
+.img{position:absolute;z-index:1;margin-bottom:10px;}
 
 #wrapper {
 background: black; 
@@ -33,7 +33,7 @@ background: black;
 #container{
     display:inline-block;
     width:800px; 
-    height:350px;
+    height:355px;
     margin: 0 auto; 
     background: black; 
     position:relative; 
@@ -41,21 +41,30 @@ background: black;
     text-align: center;
     border-radius: 10px; 
     padding-right: 100px;
-    padding-bottom: 50px;
+    padding-bottom: 70px;
     padding-top: 50px;
     box-shadow: 0 5px 50px #333}
 
 #canvas{
     position:relative;
+    top: 70px;
     z-index:20;
+}
+
+#image2{
+    z-index:30;
+    position: absolute;
+  top: 405px;
+  left: 780px;
 }
         </style>
     </head>
     <body>
         <div id="wrapper">
                 <div id="container">
-    <img class='img' width="800px" height="350px" src="/image" alt="" />
+    <img id="imageVal" class='img' width="800px" height="350px" alt="" />
     <canvas style="margin-left: 100px" id='canvas' width="600px" height="350px"></canvas>
+    <img id="image2" class='img' width="70px" height="70px" src="/static/Logo.png" alt="" />
 </div>
                 
         </div>
@@ -66,8 +75,13 @@ background: black;
              * License: MIT
              * Feb 15, 2014
              */
+    
             window.onload = function() {
                 new Visualizer().ini();
+                var d = new Date(); 
+    document.getElementById("imageVal").src = 
+      "/image?ver=" + 
+       d.getTime();
             };
             var Visualizer = function() {
                 this.file = null, //the current file
@@ -174,7 +188,7 @@ background: black;
                     var that = this,
                         canvas = document.getElementById('canvas'),
                         cwidth = canvas.width,
-                        cheight = canvas.height - 2,
+                        cheight = canvas.height + 100,
                         meterWidth = 10, //width of the meters in the spectrum
                         gap = 2, //gap between meters
                         capHeight = 2,
