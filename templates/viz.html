@@ -17,20 +17,47 @@
                 opacity: 1!important;
             }
             #visualizer_wrapper{
-                text-align: center;
+                
             }
             footer{
                 position: fixed;
                 bottom: 2px;
                 color:#aaa;
             }
+            body{text-align: center;background: #f2f6f8;}
+.img{position:absolute;z-index:1;}
+
+#wrapper {
+background: black; 
+}
+#container{
+    display:inline-block;
+    width:800px; 
+    height:350px;
+    margin: 0 auto; 
+    background: black; 
+    position:relative; 
+    border:5px solid black; 
+    text-align: center;
+    border-radius: 10px; 
+    padding-right: 100px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+    box-shadow: 0 5px 50px #333}
+
+#canvas{
+    position:relative;
+    z-index:20;
+}
         </style>
     </head>
     <body>
         <div id="wrapper">
-            <div id="visualizer_wrapper">
-                <canvas id='canvas' width="800px" height="350px"></canvas>
-            </div>
+                <div id="container">
+    <img class='img' width="800px" height="350px" src="/image" alt="" />
+    <canvas style="margin-left: 100px" id='canvas' width="600px" height="350px"></canvas>
+</div>
+                
         </div>
         <script type="text/javascript">
             /*
@@ -155,10 +182,11 @@
                         meterNum = 800 / (10 + 2), //count of the meters
                         capYPositionArray = []; ////store the vertical position of hte caps for the preivous frame
                     ctx = canvas.getContext('2d'),
+                    ctx.globalAlpha = 0.8;
                     gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                    gradient.addColorStop(1, '#0f0');
-                    gradient.addColorStop(0.5, '#ff0');
-                    gradient.addColorStop(0, '#f00');
+                    gradient.addColorStop(1, '#ffffff');
+                    gradient.addColorStop(0.5, '#ffffff');
+                    gradient.addColorStop(0, '#ffffff');
                     var drawMeter = function() {
                         var array = new Uint8Array(analyser.frequencyBinCount);
                         analyser.getByteFrequencyData(array);
